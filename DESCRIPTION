@@ -1,13 +1,24 @@
 Package: JW26ADS8192
-Title: What the Package Does (One Line, Title Case)
+Title: ADS 8192 Differential Expression with DESeq2
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Wilson", "Jewel", email = "jewel.wilson@stjude.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0009-6729-5476"))
+Description: Provides a tool for differential gene analysis of lymph node regulatory T cells (Tregs) and conventional T cells (Tconv) isolated from four mouse tissues (fat, liver, lymph node, and skin). Tool includes functions that (1) filtering low expression gene counts, (2) preforms DESeq2 differential expression analysis, (3) applies log2fold-change shrinkage to the DESeq2 results, (4) summarizes the number of up/down/non-significant genes at given thresholds, (5) computes indepdenpt filtering diagonsitics, (6) visualizes results as a volcano plot, and (7) exportsthe results to TSV files.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 URL: https://github.com/wilsonjewel27/JW26ADS8192
 BugReports: https://github.com/wilsonjewel27/JW26ADS8192/issues
+Imports: 
+    ggplot2,
+    SummarizedExperiment,
+    DESeq2,
+    apeglm
+Suggests: 
+    knitr,
+    testthat
+Depends: 
+    R (>= 3.5)
+LazyData: true
