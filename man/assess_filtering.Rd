@@ -5,21 +5,24 @@
 \title{The filtering diagnostics evaluate how the pre-filtering threshold (minimum count per group) affects the number of discoveries, enabling users to choose an informed threshold}
 \usage{
 assess_filtering(
-  se,
+  se_ln,
   count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
   assay_name = "counts",
   ref_level = "Tconv",
+  group_var = "cell_type",
   p_threshold = 0.05
 )
 }
 \arguments{
-\item{se}{A SummarizedExperiment object}
+\item{se_ln}{A SummarizedExperiment object}
 
 \item{count_thresholds}{minimum threshold of gene counts (default: 'c(0, 1, 5, 10, 20, 50, 100, 200, 500)')}
 
 \item{assay_name}{Name of assay to use (default: "counts")}
 
 \item{ref_level}{sets the reference to a specific cell type (default: "Tconv")}
+
+\item{group_var}{determines the column to categorization}
 
 \item{p_threshold}{The threshold that defines a gene's significance (default: 0.05)}
 }
@@ -31,7 +34,10 @@ The filtering diagnostics evaluate how the pre-filtering threshold (minimum coun
 }
 \examples{
 library(SummarizedExperiment)
+library(DESeq2)
+data(example_se)
 
-tissueTreg_filtering_assessment<- assess_filtering(example_se)
+# Step 1: Evaluate how model preforms using different threshold values
+example_se_filtering_assessment<- assess_filtering(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
 
 }

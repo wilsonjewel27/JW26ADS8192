@@ -21,7 +21,7 @@ generate_volcano(
 
 \item{set_title}{The title of the plot}
 
-\item{p_threshold}{THe threshold that defines a gene's significance (default: 0.05)}
+\item{p_threshold}{The threshold that defines a gene's significance (default: 0.05)}
 }
 \value{
 volcano pot with significant genes highlighted
@@ -32,7 +32,20 @@ Visualize results as a volcano plot
 \examples{
 library(ggplot2)
 library(SummarizedExperiment)
+library(DESeq2)
+library(apeglm)
+data(example_se)
 
-tissueTreg_volcano<- generate_volcano(tissueTreg_filter_DESeq2_shrink)
+# Step 1; Filter low expression genes
+se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
+
+# Step 2: Run the DESeq2 pipeline to get differential gene expression results
+ se_dge<- run_DESeq2(se_filtered)
+
+# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+se_dge_shrink <- log2_shrinkage(se_dge)
+
+# Step 4: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
+example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05)
 
 }

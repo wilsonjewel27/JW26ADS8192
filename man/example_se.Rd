@@ -19,7 +19,7 @@ Simulated data for teaching purposes
 example_se
 }
 \description{
-A small SummarizedExperiment with 500 genes and 20 cells.
+A small SummarizedExperiment with 500 genes, 20 samples.
 The first 75 genes are "Treg" cells, and the remainder are "Tconv".
 }
 \examples{

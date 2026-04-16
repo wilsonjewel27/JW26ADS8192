@@ -1,6 +1,6 @@
 #' Example SummarizedExperiment for testing
 #'
-#' A small SummarizedExperiment with 500 genes and 20 cells.
+#' A small SummarizedExperiment with 500 genes, 20 samples.
 #' The first 75 genes are "Treg" cells, and the remainder are "Tconv".
 #'
 #' @format A SummarizedExperiment with:

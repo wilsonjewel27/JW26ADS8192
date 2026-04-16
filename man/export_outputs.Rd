@@ -8,7 +8,8 @@ export_outputs(
   res_df,
   summary_df,
   filtering_diag,
-  output_dir = file.path(tempdir(), "de_output")
+  volcano = v_plot,
+  output_dir = file.path(, "de_output")
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ export_outputs(
 \item{summary_df}{A data frame summarizing the number of non-significant(ns)/up/down genes}
 
 \item{filtering_diag}{A data frame summarizing the number of significant genes per threshold}
+
+\item{volcano}{Your choice of volcano plot}
 
 \item{output_dir}{Directories where files will be written}
 }
@@ -27,5 +30,31 @@ TSV files of differential expression results, summary counts, and filtering diag
 Export differential expression results, summary counts, and filtering diagnostics to TSV files
 }
 \examples{
-export_results<- export_outputs( tissueTreg_filter_DESeq2_shrink, DESeq2_gene_reg_summary,  tissueTreg_filtering_assessment)
+library(ggplot2)
+library(SummarizedExperiment)
+library(DESeq2)
+library(apeglm)
+ data(example_se)
+
+# Step 1; Filter low expression genes
+se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
+
+# Step 2: Run the DESeq2 pipeline to get differential gene expression results
+ se_dge<- run_DESeq2(se_filtered)
+
+# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+se_dge_shrink <- log2_shrinkage(se_dge)
+
+# Step 4: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
+example_se_volcano<- generate_volcano(se_dge_shrink)
+
+#Step 5: Generate the regulation summary of the genes
+DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
+
+# Step 6: Evaluate how model preforms using different threshold values
+example_se_filtering_assessment<- assess_filtering(example_se)
+
+# Step 7: Export final results
+example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path("C:/Users/jwilso09/JW26ADS8192/test_1", "de_output") )
+
 }

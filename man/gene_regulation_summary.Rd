@@ -21,7 +21,20 @@ Summarize the number of significantly non-significant(ns)/up/down genes at given
 }
 \examples{
 library(SummarizedExperiment)
+library(DESeq2)
+library(apeglm)
+data(example_se)
 
-DESeq2_gene_reg_summary<- gene_regulation_summary(tissueTreg_filter_DESeq2_shrink)
+# Step 1; Filter low expression genes
+se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
+
+# Step 2: Run the DESeq2 pipeline to get differential gene expression results
+ se_dge<- run_DESeq2(se_filtered)
+
+# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+se_dge_shrink <- log2_shrinkage(se_dge)
+
+#Step 4: Generate the regulation summary of the genes
+DESeq2_gene_reg_summary<- gene_regulation_summary(res_df = se_dge_shrink, p_threshold = 0.05, fc_threshold =  0.5)
 
 }

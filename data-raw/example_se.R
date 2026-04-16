@@ -19,13 +19,13 @@ rownames(counts) <- paste0("gene", seq_len(n_genes))
 colnames(counts) <- paste0("sample", seq_len(n_cells))
 
 #Create different T cell classes: first 75 are Treg
-cell_class<- rep(c("Treg", "Tconv"), each = n_cells/2)
-counts[1:75, cell_class == "Treg"] <- counts[1:75, cell_class =="Treg"] * 2
+cell_type<- rep(c("Treg", "Tconv"), each = n_cells/2)
+counts[1:75, cell_type == "Treg"] <- counts[1:75, cell_type =="Treg"] * 2
 
 #cell Metadata
 cell_data <- data.frame(
   cell_id = colnames(counts),
-  cell_class = cell_class,
+  cell_type = cell_types,
   batch = rep(c("A", "B"), length.out = n_cells),
   row.names = colnames(counts)
 )
