@@ -37,7 +37,7 @@
 #' example_se_filtering_assessment<- assess_filtering(example_se)
 #'
 #' # Step 7: Export final results
-#' example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path("C:/Users/jwilso09/JW26ADS8192/test_1", "de_output") )
+#' example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path("ADD/YOUR/PATH", "de_output") )
 #'
 export_outputs<- function(res_df, summary_df, filtering_diag, volcano = v_plot, output_dir = file.path( , "de_output")){
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)

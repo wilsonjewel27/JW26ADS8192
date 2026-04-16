@@ -20,7 +20,7 @@
 #' # Step 1; Filter low expression genes
 #' se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
 #'
-#' # Step 2: Run the DESeq2 pipeline to get shrinkage results
+#' # Step 2: Run the DESeq2 pipeline
 #' se_dge<- run_DESeq2(se_ln = se_filtered, group_var = "cell_type", ref_level = "Tconv")
 #'
 run_DESeq2 <- function(se_ln, group_var = "cell_type", ref_level = "Tconv" ){
