@@ -8,7 +8,7 @@
 #'
 #' @return Summary of non-significant(ns)/up/down genes
 #'
-#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assay colData
 #' @export
 #'
 #' @examples

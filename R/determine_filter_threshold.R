@@ -11,8 +11,8 @@
 #'
 #' @return A dataframe summarizing the number of significant genes per threshold
 #'
-#' @importFrom  SummarizedExperiment assay
-#' @importFrom  DESeq2 DESeqDataSet DESeq result
+#' @importFrom  SummarizedExperiment assay colData
+#' @importFrom  DESeq2 DESeqDataSet DESeq results
 #' @export
 #'
 #' @examples
@@ -21,12 +21,33 @@
 #' data(example_se)
 #'
 #' # Step 1: Evaluate how model preforms using different threshold values
-#' example_se_filtering_assessment<- assess_filtering(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
+#' example_se_filtering_assessment<- determine_filter_threshold(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
 #'
-assess_filtering<- function(se_ln, count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05){
-  filtering_diag <- data.frame(threshold = count_thresholds, n_tested = NA_integer_, n_significant = NA_integer_)
-  message("colData columns: ", paste(colnames(colData(se_ln)), collapse = ", "))
-  se_ln[[group_var]] <- as.factor(se_ln[[group_var]])                             #converts unique(group_var) into factor
+#' # Step 2: Choose the optimal min gene count threshold per gene and insert into all functions. `min_count_per_group` (default: 10)
+#'
+determine_filter_threshold<- function(se_ln, count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
+                                      assay_name = "counts", ref_level = "Tconv",
+                                      group_var = "cell_type", p_threshold = 0.05){
+  #if `group_var` isn't in se, throw error
+  if (!group_var %in% colnames(colData(se_ln))){
+    stop(sprintf(
+      "invalid group_var: %s. Available columns are: %s",
+      group_var,
+      paste(colnames(colData(se_ln)), collapse = ", ")
+    ))
+    }
+  #else, run analysis
+  else{
+    #if ref_level isn't a category in group_var, throw error
+    if (!ref_level %in% unique(se_ln[[group_var]])){
+      stop(sprintf("invalid ref_level: %s. Available ref_level are: %s",
+                   ref_level,
+                   paste(unique(se_ln[[group_var]]), collapse = ", ")))
+      }
+    #else, proceed
+    else{
+    filtering_diag <- data.frame(threshold = count_thresholds, n_tested = NA_integer_, n_significant = NA_integer_)
+  se_ln[[group_var]] <- as.factor(se_ln[[group_var]])
   for (j in seq_along(count_thresholds)) {
     thresh <- count_thresholds[j]
     keep_t <- rowSums(assay(se_ln, assay_name)) >= thresh
@@ -43,5 +64,8 @@ assess_filtering<- function(se_ln, count_thresholds = c(0, 1, 5, 10, 20, 50, 100
     filtering_diag$n_tested[j] <- sum(keep_t)
     filtering_diag$n_significant[j] <- sum(res_t$padj < p_threshold, na.rm = TRUE)
   }
+#output returns as a dataframe
   return(filtering_diag)
+  }
+  }
 }

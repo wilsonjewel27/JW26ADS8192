@@ -11,8 +11,8 @@
 #'
 #' @return volcano pot with significant genes highlighted
 #'
-#' @importFrom SummarizedExperiment assay
-#' @importFrom ggplot2 ggplot geom_point scale_color_manual theme_bw labs geom_vline geom_hline
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom ggplot2 ggplot geom_point scale_color_manual theme_bw labs geom_vline geom_hline aes
 #' @export
 #'
 #' @examples
@@ -34,8 +34,13 @@
 #' # Step 4: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
 #' example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05)
 #'
-generate_volcano<- function(res_df, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05){
+generate_volcano<- function(res_df, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)",
+                            set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05){
 #re-create gene regulation summary df (with gene names)
+  if (!all(c("padj", "log2FoldChange") %in% colnames(res_df))){
+    stop("invalid dataframe. Must contain 'padj' and 'log2FoldChange' columns.")
+  }
+  else {
   res_df$direction <- "ns"
   res_df$direction[res_df$padj < p_threshold & res_df$log2FoldChange >  fc_threshold] <- "up"
   res_df$direction[res_df$padj < p_threshold & res_df$log2FoldChange <  -fc_threshold] <- "down"
@@ -53,4 +58,5 @@ generate_volcano<- function(res_df, fc_threshold =  0.5, xlab = "log2 Fold Chang
     geom_vline(xintercept = c(-fc_threshold, fc_threshold), lty = 2) +
     geom_hline(yintercept = -log10(p_threshold), lty = 2)
   return(v_plot)
+  }
 }

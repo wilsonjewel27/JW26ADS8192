@@ -8,7 +8,7 @@
 #'
 #' @return A SummarizedExperiment subset of genes with greater than n counts
 #'
-#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assay colData
 #' @export
 #'
 #' @examples
@@ -22,5 +22,6 @@ filter_low_exp_genes <- function(se_ln, min_count_per_group = 10, assay_name = "
   keep_genes <- rowSums(assay(se_ln, assay_name)) >= min_count_per_group
   se_ln <- se_ln[keep_genes, ]
   cat("Genes after filtering:", nrow(se_ln), "\n")
+  cat("colData names:", colnames(colData(se_ln)))
   return(se_ln)
 }

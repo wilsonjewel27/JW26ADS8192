@@ -8,8 +8,8 @@
 #'
 #' @return The results of the Differential Gene Analysis between cell_type
 #'
-#' @importFrom SummarizedExperiment assay
-#' @importFrom DESeq2 DESeqDataSet DESeq result
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom DESeq2 DESeqDataSet DESeq results
 #' @export
 #'
 #' @examples
@@ -24,10 +24,27 @@
 #' se_dge<- run_DESeq2(se_ln = se_filtered, group_var = "cell_type", ref_level = "Tconv")
 #'
 run_DESeq2 <- function(se_ln, group_var = "cell_type", ref_level = "Tconv" ){
-  se_ln[[group_var]] <- as.factor(se_ln[[group_var]])
-  se_ln[[group_var]] <- relevel(se_ln[[group_var]], ref = ref_level)
-  design_formula <- as.formula(paste('~', group_var))
-  dds <- DESeqDataSet(se_ln, design = design_formula)
-  dds <- DESeq(dds)
-  return(dds)
+  #if `group_var` isn't in se, throw error
+  if (!group_var %in% colnames(colData(se_ln))){
+    stop(sprintf("invalid group_var: %s. Available group_var are: %s",
+      group_var,
+      paste(colnames(colData(se_ln)), collapse = ", ")
+    ))
+  }
+  #else, run analysis
+  else{
+    if (!ref_level %in% unique(se_ln[[group_var]])){
+      stop(sprintf("invalid ref_level: %s. Available ref_level are: %s",
+                   ref_level,
+                   paste(unique(se_ln[[group_var]]), collapse = ", ")))
+    }
+    else{
+      se_ln[[group_var]] <- as.factor(se_ln[[group_var]])                 #convert the se elements of group_var into a factor
+      se_ln[[group_var]] <- relevel(se_ln[[group_var]], ref = ref_level)  #set a one of the group_var categories to a reference level
+      design_formula <- as.formula(paste('~', group_var))
+      dds <- DESeqDataSet(se_ln, design = design_formula)                 #use DESeq2 on se
+      dds <- DESeq(dds)
+      return(dds)
+      }
+    }
 }

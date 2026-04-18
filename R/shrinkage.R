@@ -7,8 +7,8 @@
 #'
 #' @return Dataframe of log2fold-changed shrinkage applied to ds
 #'
-#' @importFrom SummarizedExperiment assay
-#' @importFrom DESeq2 lfcShrink
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom DESeq2 lfcShrink resultsNames
 #' @importFrom apeglm apeglm
 #' @export
 #'

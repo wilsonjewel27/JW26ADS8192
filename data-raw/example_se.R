@@ -25,7 +25,7 @@ counts[1:75, cell_type == "Treg"] <- counts[1:75, cell_type =="Treg"] * 2
 #cell Metadata
 cell_data <- data.frame(
   cell_id = colnames(counts),
-  cell_type = cell_types,
+  cell_type = cell_type,
   batch = rep(c("A", "B"), length.out = n_cells),
   row.names = colnames(counts)
 )

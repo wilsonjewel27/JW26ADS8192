@@ -21,7 +21,7 @@ library(JW26ADS8192)
 data(example_se)
 
 #Assess the 'minimun gene count' filtering threshold to determine the best threshold.
-example_se_filtering_assessment<- assess_filtering(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
+example_se_filtering_assessment<- determine_filter_threshold(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
 
 #Filter out the low expression gene
 se_filtered <- filter_low_exp_genes(se_ln = example_se, min_count_per_group = 10, assay_name = "counts")
