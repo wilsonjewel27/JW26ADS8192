@@ -49,3 +49,6 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->

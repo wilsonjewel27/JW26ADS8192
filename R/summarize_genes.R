@@ -2,19 +2,17 @@
 
 #' Summarize the number of significantly non-significant(ns)/up/down genes at given thresholds
 #'
-#' @param p_threshold The p-value that determines the number for genes per category(default: 0.05)
+#' @param p_threshold Significance threshold for adjusted p-value (default: 0.05)
 #' @param res_df Dataframe of log2fold-changed shrinkage applied to ds
-#' @param fc_threshold (default = 0.5)
+#' @param fc_threshold fold change threshold (default = 0.5)
 #'
 #' @return Summary of non-significant(ns)/up/down genes
 #'
 #' @importFrom SummarizedExperiment assay colData
+#' @importFrom apeglm apeglm
 #' @export
 #'
 #' @examples
-#' library(SummarizedExperiment)
-#' library(DESeq2)
-#' library(apeglm)
 #' data(example_se)
 #'
 #' # Step 1; Filter low expression genes

@@ -15,7 +15,7 @@ generate_volcano(
 \arguments{
 \item{res_df}{Dataframe of log2fold-changed shrinkage applied to ds}
 
-\item{fc_threshold}{(default: 0.5)}
+\item{fc_threshold}{fold change threshold(default: 0.5)}
 
 \item{xlab}{The label of the x-axis}
 
@@ -30,10 +30,6 @@ volcano pot with significant genes highlighted
 Visualize results as a volcano plot
 }
 \examples{
-library(ggplot2)
-library(SummarizedExperiment)
-library(DESeq2)
-library(apeglm)
 data(example_se)
 
 # Step 1; Filter low expression genes

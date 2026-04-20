@@ -20,7 +20,6 @@ A SummarizedExperiment subset of genes with greater than n counts
 Filter genes with low expression
 }
 \examples{
-library(SummarizedExperiment)
 data(example_se)
 
 # Step 1; Filter low expression genes

@@ -30,10 +30,6 @@ TSV files of differential expression results, summary counts, and filtering diag
 Export differential expression results, summary counts, and filtering diagnostics to TSV files
 }
 \examples{
-library(ggplot2)
-library(SummarizedExperiment)
-library(DESeq2)
-library(apeglm)
  data(example_se)
 
 # Step 1: Evaluate how model preforms using different threshold values and choose a threshold
@@ -54,10 +50,7 @@ example_se_volcano<- generate_volcano(se_dge_shrink)
 # Step 6: Generate the regulation summary of the genes
 DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 
-# Step 7: Evaluate how model preforms using different threshold values
-example_se_filtering_assessment<- determine_filter_threshold(example_se)
-
-# Step 8: Export final results
+# Step 7: Export final results
 example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
 
 }

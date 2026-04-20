@@ -9,9 +9,9 @@ gene_regulation_summary(res_df, p_threshold = 0.05, fc_threshold = 0.5)
 \arguments{
 \item{res_df}{Dataframe of log2fold-changed shrinkage applied to ds}
 
-\item{p_threshold}{The p-value that determines the number for genes per category(default: 0.05)}
+\item{p_threshold}{Significance threshold for adjusted p-value (default: 0.05)}
 
-\item{fc_threshold}{(default = 0.5)}
+\item{fc_threshold}{fold change threshold (default = 0.5)}
 }
 \value{
 Summary of non-significant(ns)/up/down genes
@@ -20,9 +20,6 @@ Summary of non-significant(ns)/up/down genes
 Summarize the number of significantly non-significant(ns)/up/down genes at given thresholds
 }
 \examples{
-library(SummarizedExperiment)
-library(DESeq2)
-library(apeglm)
 data(example_se)
 
 # Step 1; Filter low expression genes

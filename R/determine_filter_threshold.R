@@ -5,9 +5,9 @@
 #' @param se_ln A SummarizedExperiment object
 #' @param count_thresholds minimum threshold of gene counts (default: 'c(0, 1, 5, 10, 20, 50, 100, 200, 500)')
 #' @param assay_name Name of assay to use (default: "counts")
-#' @param ref_level sets the reference to a specific cell type (default: "Tconv")
-#' @param p_threshold The threshold that defines a gene's significance (default: 0.05)
-#' @param group_var determines the column to categorization
+#' @param ref_level Sets the reference for comparison (default: "Tconv")
+#' @param p_threshold Significance threshold for adjusted p-value(default: 0.05)
+#' @param group_var metadata for grouping (default: "cell_type")
 #'
 #' @return A dataframe summarizing the number of significant genes per threshold
 #'
@@ -16,8 +16,6 @@
 #' @export
 #'
 #' @examples
-#' library(SummarizedExperiment)
-#' library(DESeq2)
 #' data(example_se)
 #'
 #' # Step 1: Evaluate how model preforms using different threshold values

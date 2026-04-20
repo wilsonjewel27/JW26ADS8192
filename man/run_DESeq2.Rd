@@ -20,8 +20,6 @@ The results of the Differential Gene Analysis between cell_type
 Preform Differential Gene Analysis
 }
 \examples{
-library(SummarizedExperiment)
-library(DESeq2)
 data(example_se)
 
 # Step 1; Filter low expression genes

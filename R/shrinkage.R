@@ -1,6 +1,6 @@
 # R/data.R
 
-#' Applies log2fold-change shrinkage for more reliable effect-size estimates
+#' Apply log2fold-change shrinkage for more reliable effect-size estimates
 #'
 #' @param dds The results of 'DESeq2_function'
 #' @param shrinkage The estimator used to assess the glm coefficeints (default: "apeglm")
@@ -13,9 +13,6 @@
 #' @export
 #'
 #' @examples
-#' library(SummarizedExperiment)
-#' library(DESeq2)
-#' library(apeglm)
 #' data(example_se)
 #'
 #' # Step 1; Filter low expression genes

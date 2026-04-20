@@ -3,7 +3,7 @@
 #' Visualize results as a volcano plot
 #'
 #' @param res_df Dataframe of log2fold-changed shrinkage applied to ds
-#' @param fc_threshold (default: 0.5)
+#' @param fc_threshold fold change threshold(default: 0.5)
 #' @param xlab The label of the x-axis
 #' @param set_title The title of the plot
 #' @param p_threshold The threshold that defines a gene's significance (default: 0.05)
@@ -13,13 +13,10 @@
 #'
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom ggplot2 ggplot geom_point scale_color_manual theme_bw labs geom_vline geom_hline aes
+#' @importFrom apeglm apeglm
 #' @export
 #'
 #' @examples
-#' library(ggplot2)
-#' library(SummarizedExperiment)
-#' library(DESeq2)
-#' library(apeglm)
 #' data(example_se)
 #'
 #' # Step 1; Filter low expression genes

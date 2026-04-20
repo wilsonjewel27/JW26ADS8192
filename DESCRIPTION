@@ -16,7 +16,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-URL: https://github.com/wilsonjewel27/JW26ADS8192
+URL: https://github.com/wilsonjewel27/JW26ADS8192, https://wilsonjewel27.github.io/JW26ADS8192/
 BugReports: https://github.com/wilsonjewel27/JW26ADS8192/issues
 Imports: 
     ggplot2,
@@ -24,7 +24,8 @@ Imports:
     DESeq2,
     apeglm,
     roxygen2,
-    usethis
+    usethis,
+    Rapp
 Suggests: 
     knitr,
     rmarkdown,

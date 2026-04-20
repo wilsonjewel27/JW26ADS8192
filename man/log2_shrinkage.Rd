@@ -2,7 +2,7 @@
 % Please edit documentation in R/shrinkage.R
 \name{log2_shrinkage}
 \alias{log2_shrinkage}
-\title{Applies log2fold-change shrinkage for more reliable effect-size estimates}
+\title{Apply log2fold-change shrinkage for more reliable effect-size estimates}
 \usage{
 log2_shrinkage(dds, shrinkage = "apeglm")
 }
@@ -15,12 +15,9 @@ log2_shrinkage(dds, shrinkage = "apeglm")
 Dataframe of log2fold-changed shrinkage applied to ds
 }
 \description{
-Applies log2fold-change shrinkage for more reliable effect-size estimates
+Apply log2fold-change shrinkage for more reliable effect-size estimates
 }
 \examples{
-library(SummarizedExperiment)
-library(DESeq2)
-library(apeglm)
 data(example_se)
 
 # Step 1; Filter low expression genes

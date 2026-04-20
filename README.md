@@ -41,3 +41,11 @@ example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.
 #Export the filtering threhold assessment, differential expression results and Expression-Count summary to TSV files & the volcano plot to pdf and png
 example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path("ADD/YOUR/PATH", "de_output") )
 ```
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+<!-- badges: start -->
+[![pkgdown](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml)
+<!-- badges: end -->

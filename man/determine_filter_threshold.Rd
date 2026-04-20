@@ -20,11 +20,11 @@ determine_filter_threshold(
 
 \item{assay_name}{Name of assay to use (default: "counts")}
 
-\item{ref_level}{sets the reference to a specific cell type (default: "Tconv")}
+\item{ref_level}{Sets the reference for comparison (default: "Tconv")}
 
-\item{group_var}{determines the column to categorization}
+\item{group_var}{metadata for grouping (default: "cell_type")}
 
-\item{p_threshold}{The threshold that defines a gene's significance (default: 0.05)}
+\item{p_threshold}{Significance threshold for adjusted p-value(default: 0.05)}
 }
 \value{
 A dataframe summarizing the number of significant genes per threshold
@@ -33,8 +33,6 @@ A dataframe summarizing the number of significant genes per threshold
 The filtering diagnostics evaluate how the pre-filtering threshold (minimum count per group) affects the number of discoveries, enabling users to choose an informed threshold
 }
 \examples{
-library(SummarizedExperiment)
-library(DESeq2)
 data(example_se)
 
 # Step 1: Evaluate how model preforms using different threshold values

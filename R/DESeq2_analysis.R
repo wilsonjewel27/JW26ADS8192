@@ -13,8 +13,6 @@
 #' @export
 #'
 #' @examples
-#' library(SummarizedExperiment)
-#' library(DESeq2)
 #' data(example_se)
 #'
 #' # Step 1; Filter low expression genes
