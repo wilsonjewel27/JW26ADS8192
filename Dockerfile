@@ -46,5 +46,6 @@ COPY tests/ tests/
 
 #RUN R CMD INSTALL /ads8192
 
+
 # Default: run package tests (WORKDIR is package root)
 CMD ["R", "--no-save", "-q", "-e", "devtools::test()"]
