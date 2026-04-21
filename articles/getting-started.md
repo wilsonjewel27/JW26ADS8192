@@ -159,9 +159,9 @@ DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 # Step 7: Export final results
 example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
 #> Export complete. Files saved:
-#> /tmp/Rtmp6xIIle/de_output/de_results.tsv
-#> /tmp/Rtmp6xIIle/de_output/de_summary.tsv
-#> /tmp/Rtmp6xIIle/de_output/filtering_diagnostics.tsv
-#> /tmp/Rtmp6xIIle/de_output/volcano_plot.pdf
-#> /tmp/Rtmp6xIIle/de_output/volcano_plot.png
+#> /tmp/RtmpQIqSTc/de_output/de_results.tsv
+#> /tmp/RtmpQIqSTc/de_output/de_summary.tsv
+#> /tmp/RtmpQIqSTc/de_output/filtering_diagnostics.tsv
+#> /tmp/RtmpQIqSTc/de_output/volcano_plot.pdf
+#> /tmp/RtmpQIqSTc/de_output/volcano_plot.png
 ```
