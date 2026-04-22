@@ -6,8 +6,8 @@ library(SummarizedExperiment)
 set.seed(13)
 
 #500 genes, 20 samples
-n_genes <- 500
-n_cells <- 20
+n_genes <- 50
+n_cells <- 6
 
 #stimulate counts (negative binomial-ish)
 counts <- matrix(
@@ -18,9 +18,9 @@ counts <- matrix(
 rownames(counts) <- paste0("gene", seq_len(n_genes))
 colnames(counts) <- paste0("sample", seq_len(n_cells))
 
-#Create different T cell classes: first 75 are Treg
+#Create different T cell classes: first 25 are Treg-upregulated (50% of genes)
 cell_type<- rep(c("Treg", "Tconv"), each = n_cells/2)
-counts[1:75, cell_type == "Treg"] <- counts[1:75, cell_type =="Treg"] * 2
+counts[1:25, cell_type == "Treg"] <- counts[1:25, cell_type =="Treg"] * 2
 
 #cell Metadata
 cell_data <- data.frame(

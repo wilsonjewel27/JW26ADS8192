@@ -1,0 +1,17 @@
+name: ads8192
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base
+  - r-ggplot2
+  - samtools
+  - r-roxygen2
+  - bioconductor-apeglm
+  - bioconductor-deseq2
+  - r-ragg
+  - r-rappdirs
+  - r-usethis
+  - bioconductor-summarizedexperiment
+  - r-devtools
+prefix: /home/jewel-wilson/miniconda3/envs/ads8192

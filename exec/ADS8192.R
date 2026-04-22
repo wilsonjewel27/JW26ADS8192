@@ -28,7 +28,7 @@ switch(
   "",
   #| title: Step 1 Determine Minimal Number of Gene Counts
   #| description: Determine optimal minimal gene count threshold.
-  filter_threshold = {
+  determine_filter_threshold = {
     #| description: Path to count matrix TSV or CSV.
     #| short: c
     counts <- ""
