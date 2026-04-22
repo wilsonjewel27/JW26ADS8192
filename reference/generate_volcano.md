@@ -47,7 +47,7 @@ data(example_se)
 
 # Step 1; Filter low expression genes
 se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
-#> Genes after filtering: 500 
+#> Genes after filtering: 50 
 #> colData names: cell_id cell_type batch
 
 # Step 2: Run the DESeq2 pipeline to get differential gene expression results

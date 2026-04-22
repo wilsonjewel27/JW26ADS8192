@@ -105,26 +105,21 @@ library(SummarizedExperiment)
 data(example_se)
 example_se
 #> class: SummarizedExperiment 
-#> dim: 500 20 
+#> dim: 50 6 
 #> metadata(0):
 #> assays(1): counts
-#> rownames(500): gene1 gene2 ... gene499 gene500
+#> rownames(50): gene1 gene2 ... gene49 gene50
 #> rowData names(2): gene_id gene_symbol
-#> colnames(20): sample1 sample2 ... sample19 sample20
+#> colnames(6): sample1 sample2 ... sample5 sample6
 #> colData names(3): cell_id cell_type batch
 colData(example_se)
-#> DataFrame with 20 rows and 3 columns
-#>              cell_id   cell_type       batch
-#>          <character> <character> <character>
-#> sample1      sample1        Treg           A
-#> sample2      sample2        Treg           B
-#> sample3      sample3        Treg           A
-#> sample4      sample4        Treg           B
-#> sample5      sample5        Treg           A
-#> ...              ...         ...         ...
-#> sample16    sample16       Tconv           B
-#> sample17    sample17       Tconv           A
-#> sample18    sample18       Tconv           B
-#> sample19    sample19       Tconv           A
-#> sample20    sample20       Tconv           B
+#> DataFrame with 6 rows and 3 columns
+#>             cell_id   cell_type       batch
+#>         <character> <character> <character>
+#> sample1     sample1        Treg           A
+#> sample2     sample2        Treg           B
+#> sample3     sample3        Treg           A
+#> sample4     sample4       Tconv           B
+#> sample5     sample5       Tconv           A
+#> sample6     sample6       Tconv           B
 ```

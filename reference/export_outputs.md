@@ -89,7 +89,7 @@ example_se_filtering_assessment<- determine_filter_threshold(example_se)
 
 # Step 2; Filter low expression genes
 se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
-#> Genes after filtering: 500 
+#> Genes after filtering: 50 
 #> colData names: cell_id cell_type batch
 
 # Step 3: Run the DESeq2 pipeline to get differential gene expression results
@@ -121,9 +121,9 @@ DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 # Step 7: Export final results
 example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
 #> Export complete. Files saved:
-#> /tmp/RtmpKS2nHj/de_output/de_results.tsv
-#> /tmp/RtmpKS2nHj/de_output/de_summary.tsv
-#> /tmp/RtmpKS2nHj/de_output/filtering_diagnostics.tsv
-#> /tmp/RtmpKS2nHj/de_output/volcano_plot.pdf
-#> /tmp/RtmpKS2nHj/de_output/volcano_plot.png
+#> /tmp/RtmpX62aIp/de_output/de_results.tsv
+#> /tmp/RtmpX62aIp/de_output/de_summary.tsv
+#> /tmp/RtmpX62aIp/de_output/filtering_diagnostics.tsv
+#> /tmp/RtmpX62aIp/de_output/volcano_plot.pdf
+#> /tmp/RtmpX62aIp/de_output/volcano_plot.png
 ```
