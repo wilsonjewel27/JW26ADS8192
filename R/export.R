@@ -12,6 +12,7 @@
 #'
 #' @importFrom ggplot2 ggsave
 #' @importFrom SummarizedExperiment assay colData
+#' @importFrom utils write.table
 #' @export
 #'
 #' @examples
@@ -26,17 +27,22 @@
 #' # Step 3: Run the DESeq2 pipeline to get differential gene expression results
 #'  se_dge<- run_DESeq2(se_filtered)
 #'
-#' # Step 4: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+#' # Step 4:Run log2_shrinkage on DESeq2 results to improve estimates
 #' se_dge_shrink <- log2_shrinkage(se_dge)
 #'
-#' # Step 5: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
+#' # Step 5:Generate a volcano plot from log2_shrinkage results
 #' example_se_volcano<- generate_volcano(se_dge_shrink)
 #'
 #' # Step 6: Generate the regulation summary of the genes
 #' DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 #'
 #' # Step 7: Export final results
-#' example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
+#' example_se_exports<- export_outputs(
+#' res_df = se_dge_shrink,
+#' summary_df = DESeq2_gene_reg_summary,
+#' filtering_diag = example_se_filtering_assessment,
+#' volcano = example_se_volcano,
+#' output_dir = file.path(tempdir(), "de_output") )
 #'
 export_outputs<- function(res_df, summary_df, filtering_diag, volcano,
                           output_dir = file.path(tempdir(), "de_output")){

@@ -15,7 +15,9 @@
 #' data(example_se)
 #'
 #' # Step 1; Filter low expression genes
-#' se_filtered <- filter_low_exp_genes(se_ln = example_se, min_count_per_group = 10, assay_name = "counts")
+#' se_filtered <- filter_low_exp_genes(se_ln = example_se,
+#' min_count_per_group = 10,
+#' assay_name = "counts")
 #'
 filter_low_exp_genes <- function(se_ln, min_count_per_group = 10, assay_name = "counts"){
   keep_genes <- rowSums(assay(se_ln, assay_name)) >= min_count_per_group

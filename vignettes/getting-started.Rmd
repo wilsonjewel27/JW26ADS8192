@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with ADS8192"
+title: "Getting Started with JW26ADS8192"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with ADS8192}
@@ -16,21 +16,39 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-JW26ADS8192 makes it easy to run Differential Gene Expression Analysis (via DESeq2) using RNA-seq data stored in SummarizeExperiment objects.
+JW26ADS8192 makes it easy to run Differential Gene Expression Analysis (via DESeq2) using RNA-seq data stored as sample metadata an counts matrices (TSV/CSV).
 
 ## Quick Example
 
 
-```{r example}
+### Step 1: Install JW26ADS8192 from GitHub
+```{r JW26ADS8192_installation}
+remotes::install_github("wilsonjewel27/JW26ADS8192")
+```
+
+### Step 2: Load the following libraries &example dataset
+```{r library_import}
 library(JW26ADS8192)
 library(ggplot2)
 library(SummarizedExperiment)
 library(DESeq2)
-library(apeglm)
-data(example_se)
+library(apeglm)    
+library(stats)
+library(rlang)
+library(utils)
+library(readr)
 
-# Step 1: Evaluate how model preforms using different threshold values and choose a threshold
-example_se_filtering_assessment <- determine_filter_threshold(example_se)
+ex_counts <- readr::read_tsv("./JW26ADS8192/tests/testdata/example_counts.tsv")
+ex_meta   <- readr::read_tsv("./JW26ADS8192/tests/testdata/example_meta.tsv")
+```
+
+### Start the Differential Gene Expressional Analysis
+
+#### Step 1: Determine the Low Expression Filter Threshold
+Evaluate model performance across different threshold values and select the best one. 
+```{r determine_filter_threshold}
+JW26ADS8192 determine_filter_threshold --count ex_counts --meta ex_meta --out results/
+```
 
 # Step 2; Filter low expression genes
 se_filtered <- filter_low_exp_genes(example_se, min_count_per_group = 10)
@@ -50,3 +68,4 @@ DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 # Step 7: Export final results
 example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
 ```
+
