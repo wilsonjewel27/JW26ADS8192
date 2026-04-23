@@ -16,10 +16,10 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-JW26ADS8192 makes it easy to run Differential Gene Expression Analysis (via DESeq2) using RNA-seq data stored as sample metadata an counts matrices (TSV/CSV).
+JW26ADS8192: Streamlined Differential Gene Expression Analysis with DESeq2 
+Designed for RNA-seq workflows, this package provides a streamlined pipeline from raw count matrices and sample metadata (TSV/CSV) to differential expression results.
 
 ## Quick Example
-
 
 ### Step 1: Install JW26ADS8192 from GitHub
 ```{r JW26ADS8192_installation}
@@ -42,30 +42,52 @@ ex_counts <- readr::read_tsv("./JW26ADS8192/tests/testdata/example_counts.tsv")
 ex_meta   <- readr::read_tsv("./JW26ADS8192/tests/testdata/example_meta.tsv")
 ```
 
-### Start the Differential Gene Expressional Analysis
+### Step 3: Start the Differential Gene Expressional Analysis
 
 #### Step 1: Determine the Low Expression Filter Threshold
 Evaluate model performance across different threshold values and select the best one. 
 ```{r determine_filter_threshold}
-JW26ADS8192 determine_filter_threshold --count ex_counts --meta ex_meta --out results/
+JW26ADS8192 determine_filter_threshold --count ex_counts --meta ex_meta --output ~/JW25ADS8192/tests/testdata/results/
 ```
+Results output a **filtering_analysis.tsv** table in results folder. Success confirmation will read: "Saved as RDS. Done."
 
-# Step 2; Filter low expression genes
-se_filtered <- filter_low_exp_genes(example_se, min_count_per_group = 10)
 
-# Step 3: Run the DESeq2 pipeline to get differential gene expression results
-se_dge<- run_DESeq2(se_filtered)
+#### Step 2: Filter Low Expression Genes
+Using the threshold value determined in Step 1, manually replace the `min_count_per_gene` variable and filter. Default `min-ount_per_gene` = 10.
+```{r filter_low_exp_genes}
+JW26ADS8192 filter_low_exp_genes --count ex_counts --meta ex_meta --output ~/JW25ADS8192/tests/testdata/results/
+```
+Success confirmation will read: "Saved as RDS. Done." Output **se_filtered.rds** will be save in "~/JW25ADS8192/tests/testdata/results/"
 
-# Step 4: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
-se_dge_shrink <- log2_shrinkage(se_dge)
 
-# Step 5: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
-example_se_volcano<- generate_volcano(se_dge_shrink)
+#### Step 3: Differential Gene Expression Analysis via DESeq2
+With the remaining filtered genes, preform DESeq2 to analyze the gene expression. Replace `group_var` with the column to be categorized. Default `group_var` = "cell-type". Replace `ref_level` with a specific cell type to be reference. Default `re_level` = "Tconv"
+```{r run_DESeq2}
+JW26ADS8192 run_DESeq2 --input ~/JW25ADS8192/tests/testdata/results/se_filtered.rds -output ~/JW25ADS8192/tests/testdata/results/  
+```
+Success confirmation will read: "Saved as RDS. Done." Output **se_dge.rds** will be save in "~/JW25ADS8192/tests/testdata/results/"
 
-# Step 6: Generate the regulation summary of the genes
-DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
 
-# Step 7: Export final results
-example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
+#### Step 4: Apply log2_shrinkage on DESeq2 results to improve estimates reliable estimates
+Replace `shrinkage` with the appropriate GLM estimator. Default `shrinkage` = "apeglm"
+```{r log2_shrinakge}
+JWADS8192 log2_shrinkage  --input ~/JW25ADS8192/tests/testdata/results/se_dge.rds -output ~/JW25ADS8192/tests/testdata/results/
+```
+Success confirmation will read: "Saved as RDS. Done." Results output **dge_shrink.rds** and a **dge_shrink.tsv** table saved in "~/JW25ADS8192/tests/testdata/results/"
+
+
+#### Step 5: Intrepret the Gene Regulation
+Summarize the non-significant and up and down regulated genes in the data set. Replace `p_threshold` with the appropriate adjusted p-value threshold. Default `p_threshold` = 0.05. Replace `fc_threshold` with the appropriate fold-change threshold. Default `fc_threshold` = 0.5. 
+```{r gene_regulation_summary}
+JW26ADS8192 gene_regulation_summary  --input ~/JW25ADS8192/tests/testdata/results/dge_shrink.rds -output ~/JW25ADS8192/tests/testdata/results/
+```
+Success confirmation will read: "Saved as RDS. Done." Results output **gene_reg_summary.rds** and a **gene_reg_summary.tsv** table saved in "~/JW25ADS8192/tests/testdata/results/"
+
+#### Step 6: Visualize Expression
+Generate a volcano plot to visualize the `gene_reg_summary` results. Use the same `p_threshold` and `fc_threshold` values utilized in Step 5. Replace `set_title` with the correct title. Default `set_title` = "Volcano Plot - Lymph Node Treg vs Tconv". Replace `xlab` with the correct x-axis title. Default `xlab` = "log2 Fold Change (Treg vs Tconv)".
+```{r generate_volcano}
+JW26ADS8192 generate_volcano --input ~/JW25ADS8192/tests/testdata/results/dge_shrink.rds -output ~/JW25ADS8192/tests/testdata/results/
+```
+Success confirmation will read: "Saved as RDS. Done." Results output **volcano_plot.rds**, **volcano_plot.pdf**, and **volcano_plot.png** saved in "~/JW25ADS8192/tests/testdata/results/"
 ```
 

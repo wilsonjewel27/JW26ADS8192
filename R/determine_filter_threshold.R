@@ -13,6 +13,7 @@
 #'
 #' @importFrom  SummarizedExperiment assay colData
 #' @importFrom  DESeq2 DESeqDataSet DESeq results
+#' @importFrom  utils write.table
 #' @export
 #'
 #' @examples
