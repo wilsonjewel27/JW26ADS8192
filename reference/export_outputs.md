@@ -126,9 +126,9 @@ filtering_diag = example_se_filtering_assessment,
 volcano = example_se_volcano,
 output_dir = file.path(tempdir(), "de_output") )
 #> Export complete. Files saved:
-#> /tmp/Rtmp3dhKRS/de_output/de_results.tsv
-#> /tmp/Rtmp3dhKRS/de_output/de_summary.tsv
-#> /tmp/Rtmp3dhKRS/de_output/filtering_diagnostics.tsv
-#> /tmp/Rtmp3dhKRS/de_output/volcano_plot.pdf
-#> /tmp/Rtmp3dhKRS/de_output/volcano_plot.png
+#> /tmp/Rtmpdf0Cuj/de_output/de_results.tsv
+#> /tmp/Rtmpdf0Cuj/de_output/de_summary.tsv
+#> /tmp/Rtmpdf0Cuj/de_output/filtering_diagnostics.tsv
+#> /tmp/Rtmpdf0Cuj/de_output/volcano_plot.pdf
+#> /tmp/Rtmpdf0Cuj/de_output/volcano_plot.png
 ```
