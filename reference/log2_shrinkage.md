@@ -45,7 +45,7 @@ se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
 #> final dispersion estimates
 #> fitting model and testing
 
-# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+# Step 3:Run log2_shrinkage on DESeq2 results to improve estimates
 se_dge_shrink <- log2_shrinkage(dds = se_dge, shrinkage = "apeglm")
 #> using 'apeglm' for LFC shrinkage. If used in published research, please cite:
 #>     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for

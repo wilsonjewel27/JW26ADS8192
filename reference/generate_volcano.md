@@ -63,13 +63,18 @@ se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
 #> final dispersion estimates
 #> fitting model and testing
 
-# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+# Step 3: Run log2_shrinkage on DESeq2 results to improve estimates
 se_dge_shrink <- log2_shrinkage(se_dge)
 #> using 'apeglm' for LFC shrinkage. If used in published research, please cite:
 #>     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
 #>     sequence count data: removing the noise and preserving large differences.
 #>     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
 
-# Step 4: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
-example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05)
+# Step 4: Generate a volcano plot from log2_shrinkage results
+example_se_volcano<- generate_volcano(
+res_df = se_dge_shrink,
+fc_threshold =  0.5,
+xlab = "log2 Fold Change (Treg vs Tconv)",
+set_title = "Volcano Plot - Lymph Node Treg vs Tconv",
+p_threshold = 0.05)
 ```

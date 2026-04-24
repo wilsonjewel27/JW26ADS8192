@@ -18,7 +18,7 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with ADS8192</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with JW26ADS8192</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -90,7 +90,13 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_se</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Step 1: Evaluate how model preforms using different threshold values</span></span></span>
-<span class="r-in"><span><span class="va">example_se_filtering_assessment</span><span class="op">&lt;-</span> <span class="fu">determine_filter_threshold</span><span class="op">(</span>se_ln <span class="op">=</span> <span class="va">example_se</span>,count_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>, assay_name <span class="op">=</span> <span class="st">"counts"</span>, ref_level <span class="op">=</span> <span class="st">"Tconv"</span>, group_var <span class="op">=</span> <span class="st">"cell_type"</span>, p_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">example_se_filtering_assessment</span><span class="op">&lt;-</span> <span class="fu">determine_filter_threshold</span><span class="op">(</span></span></span>
+<span class="r-in"><span>se_ln <span class="op">=</span> <span class="va">example_se</span>,</span></span>
+<span class="r-in"><span>count_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>assay_name <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
+<span class="r-in"><span>ref_level <span class="op">=</span> <span class="st">"Tconv"</span>,</span></span>
+<span class="r-in"><span>group_var <span class="op">=</span> <span class="st">"cell_type"</span>,</span></span>
+<span class="r-in"><span>p_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> converting counts to integer mode</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- note: fitType='parametric', but the dispersion trend was not well captured by the</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>    function: y = a/x + b, and a local regression fit was automatically substituted.</span>
@@ -128,7 +134,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span>    function: y = a/x + b, and a local regression fit was automatically substituted.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>    specify fitType='local' or 'mean' to avoid this message next time.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Step 2: Choose the optimal min gene count threshold per gene and insert into all functions. `min_count_per_group` (default: 10)</span></span></span>
+<span class="r-in"><span><span class="co"># Step 2: Pick the best min count threshold and set \min_count_per_group` (default: 10)`</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

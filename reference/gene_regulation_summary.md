@@ -50,7 +50,7 @@ se_filtered<- filter_low_exp_genes(example_se, min_count_per_group = 10)
 #> final dispersion estimates
 #> fitting model and testing
 
-# Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+# Step 3: Run log2_shrinkage on DESeq2 results to improve estimates
 se_dge_shrink <- log2_shrinkage(se_dge)
 #> using 'apeglm' for LFC shrinkage. If used in published research, please cite:
 #>     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
@@ -58,5 +58,8 @@ se_dge_shrink <- log2_shrinkage(se_dge)
 #>     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
 
 #Step 4: Generate the regulation summary of the genes
-DESeq2_gene_reg_summary<- gene_regulation_summary(res_df = se_dge_shrink, p_threshold = 0.05, fc_threshold =  0.5)
+DESeq2_gene_reg_summary<- gene_regulation_summary(
+res_df = se_dge_shrink,
+p_threshold = 0.05,
+fc_threshold =  0.5)
 ```

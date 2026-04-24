@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Getting Started with ADS8192 • JW26ADS8192</title>
+<title>Getting Started with JW26ADS8192 • JW26ADS8192</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with ADS8192">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with JW26ADS8192">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with ADS8192</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with JW26ADS8192</a></li>
   </ul>
 </li>
       </ul>
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Getting Started with ADS8192</h1>
+      <h1>Getting Started with JW26ADS8192</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/wilsonjewel27/JW26ADS8192/blob/master/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
@@ -67,170 +67,261 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>JW26ADS8192 makes it easy to run Differential Gene Expression
-Analysis (via DESeq2) using RNA-seq data stored in SummarizeExperiment
-objects.</p>
+<p>Designed for RNA-seq workflows, <strong>JW26ADS8192</strong> provides
+a streamlined pipeline to differential expression results. Use a
+SummarizedExperiment object through the R package interface, or supply
+raw count matrices and sample metadata (TSV/CSV) directly via the
+command-line interface.</p>
+<hr>
 </div>
 <div class="section level2">
-<h2 id="quick-example">Quick Example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
+<h2 id="analysis-via-command-line-interface-rapp-quick-example">Analysis via Command-Line Interface (Rapp): Quick Example<a class="anchor" aria-label="anchor" href="#analysis-via-command-line-interface-rapp-quick-example"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonjewel27/JW26ADS8192" class="external-link">JW26ADS8192</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by</span></span>
-<span><span class="co">#&gt; 'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'</span></span>
+<div class="section level3">
+<h3 id="step-1-install-jw26ads8192-from-github">Step 1: Install JW26ADS8192 from GitHub<a class="anchor" aria-label="anchor" href="#step-1-install-jw26ads8192-from-github"></a>
+</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"Rapp::install_pkg_cli_apps('JW26ADS8192')"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-2-load-example-dataset-and-set-paths">Step 2: Load example dataset and set paths<a class="anchor" aria-label="anchor" href="#step-2-load-example-dataset-and-set-paths"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_counts_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata"</span>, <span class="st">"example_counts.tsv"</span>, package <span class="op">=</span> <span class="st">"JW26ADS8192"</span><span class="op">)</span></span>
+<span><span class="va">ex_meta_path</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata"</span>, <span class="st">"example_meta.tsv"</span>, package <span class="op">=</span> <span class="st">"JW26ADS8192"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EX_COUNTS <span class="op">=</span> <span class="va">ex_counts_path</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EX_META   <span class="op">=</span> <span class="va">ex_meta_path</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-3-start-the-differential-gene-expression-analysis">Step 3: Start the Differential Gene Expression Analysis<a class="anchor" aria-label="anchor" href="#step-3-start-the-differential-gene-expression-analysis"></a>
+</h3>
+<div class="section level4">
+<h4 id="step-3-1-determine-the-low-expression-filter-threshold">Step 3.1: Determine the Low Expression Filter Threshold<a class="anchor" aria-label="anchor" href="#step-3-1-determine-the-low-expression-filter-threshold"></a>
+</h4>
+<p>Evaluate model performance across different threshold values and
+select the best one.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> determine_filter_threshold <span class="at">--count</span> <span class="va">$EX_COUNTS</span> <span class="at">--meta</span> <span class="va">$EX_META</span> <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Results output a <strong>filtering_analysis.tsv</strong> table in
+results folder. Success confirmation will read: “Saved as RDS.
+Done.”</p>
+</div>
+<div class="section level4">
+<h4 id="step-3-2-filter-low-expression-genes">Step 3.2: Filter Low Expression Genes<a class="anchor" aria-label="anchor" href="#step-3-2-filter-low-expression-genes"></a>
+</h4>
+<p>Using the threshold value determined in Step 1, manually replace the
+<code>min_count_per_gene</code> variable and filter. Default
+<code>min_count_per_gene</code> = 10.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> filter_low_exp_genes <span class="at">--count</span> <span class="va">$EX_COUNTS</span> <span class="at">--meta</span> <span class="va">$EX_META</span> <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Success confirmation will read: “Saved as RDS. Done.” Output
+<strong>se_filtered.rds</strong> will be save in “./results/”</p>
+</div>
+<div class="section level4">
+<h4 id="step-3-3-differential-gene-expression-analysis-via-deseq2">Step 3.3: Differential Gene Expression Analysis via DESeq2<a class="anchor" aria-label="anchor" href="#step-3-3-differential-gene-expression-analysis-via-deseq2"></a>
+</h4>
+<p>With the remaining filtered genes, preform DESeq2 to analyze the gene
+expression. Replace <code>group_var</code> with the column to be
+categorized. Default <code>group_var</code> = “cell-type”. Replace
+<code>ref_level</code> with a specific cell type to be reference.
+Default <code>re_level</code> = “Tconv”</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> run_DESeq2 <span class="at">--input</span> ./results/se_filtered.rds <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Success confirmation will read: “Saved as RDS. Done.” Output
+<strong>se_dge.rds</strong> will be save in “./results/”</p>
+</div>
+<div class="section level4">
+<h4 id="step-3-4-apply-log2_shrinkage-on-deseq2-results-to-improve-estimates-">Step 3.4: Apply log2_shrinkage on DESeq2 results to improve
+estimates.<a class="anchor" aria-label="anchor" href="#step-3-4-apply-log2_shrinkage-on-deseq2-results-to-improve-estimates-"></a>
+</h4>
+<p>Replace <code>shrinkage</code> with the appropriate GLM estimator.
+Default <code>shrinkage</code> = “apeglm”</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> log2_shrinkage  <span class="at">--input</span> ./results/se_dge.rds <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Success confirmation will read: “Saved as RDS. Done.” Results output
+<strong>dge_shrink.rds</strong> and a <strong>dge_shrink.tsv</strong>
+table saved in “./results/”</p>
+</div>
+<div class="section level4">
+<h4 id="step-3-5-intrepret-the-gene-regulation">Step 3.5: Intrepret the Gene Regulation<a class="anchor" aria-label="anchor" href="#step-3-5-intrepret-the-gene-regulation"></a>
+</h4>
+<p>Summarize the non-significant and up and down regulated genes in the
+data set. Replace <code>p_threshold</code> with the appropriate adjusted
+p-value threshold. Default <code>p_threshold</code> = 0.05. Replace
+<code>fc_threshold</code> with the appropriate fold-change threshold.
+Default <code>fc_threshold</code> = 0.5.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> gene_regulation_summary  <span class="at">--input</span> ./results/dge_shrink.rds <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Success confirmation will read: “Saved as RDS. Done.” Results output
+<strong>gene_reg_summary.rds</strong> and a
+<strong>gene_reg_summary.tsv</strong> table saved in “./results/”</p>
+</div>
+<div class="section level4">
+<h4 id="step-3-6-visualize-expression">Step 3.6: Visualize Expression<a class="anchor" aria-label="anchor" href="#step-3-6-visualize-expression"></a>
+</h4>
+<p>Generate a volcano plot to visualize the
+<code>gene_reg_summary</code> results. Use the same
+<code>p_threshold</code> and <code>fc_threshold</code> values utilized
+in Step 5. Replace <code>set_title</code> with the correct title.
+Default <code>set_title</code> = “Volcano Plot - Lymph Node Treg vs
+Tconv”. Replace <code>xlab</code> with the correct x-axis title. Default
+<code>xlab</code> = “log2 Fold Change (Treg vs Tconv)”.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">JW26ADS8192</span> generate_volcano <span class="at">--input</span> ./results/dge_shrink.rds <span class="at">--output</span> ./results/</span></code></pre></div>
+<p>Success confirmation will read: “Saved as RDS. Done.” Results output
+<strong>volcano_plot.rds</strong>, <strong>volcano_plot.pdf</strong>,
+and <strong>volcano_plot.png</strong> saved in “./results/”</p>
+<hr>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="analysis-via-r-studio-quick-example">Analysis via R Studio: Quick Example<a class="anchor" aria-label="anchor" href="#analysis-via-r-studio-quick-example"></a>
+</h2>
+<div class="section level3">
+<h3 id="step-1-install-jw26ads8192-from-github-1">Step 1: Install JW26ADS8192 from GitHub<a class="anchor" aria-label="anchor" href="#step-1-install-jw26ads8192-from-github-1"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wilsonjewel27/JW26ADS8192"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-2-load-the-following-libraries-example-dataset">Step 2: Load the following libraries &amp; example dataset<a class="anchor" aria-label="anchor" href="#step-2-load-the-following-libraries-example-dataset"></a>
+</h3>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Required Libraries</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonjewel27/JW26ADS8192" class="external-link">JW26ADS8192</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: MatrixGenerics</span></span>
-<span><span class="co">#&gt; Loading required package: matrixStats</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'MatrixGenerics'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
-<span><span class="co">#&gt;     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
-<span><span class="co">#&gt;     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
-<span><span class="co">#&gt;     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
-<span><span class="co">#&gt;     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
-<span><span class="co">#&gt;     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
-<span><span class="co">#&gt;     colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
-<span><span class="co">#&gt;     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
-<span><span class="co">#&gt;     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
-<span><span class="co">#&gt;     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
-<span><span class="co">#&gt;     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
-<span><span class="co">#&gt;     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
-<span><span class="co">#&gt;     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span></span>
-<span><span class="co">#&gt;     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
-<span><span class="co">#&gt;     rowWeightedSds, rowWeightedVars</span></span>
-<span><span class="co">#&gt; Loading required package: GenomicRanges</span></span>
-<span><span class="co">#&gt; Loading required package: stats4</span></span>
-<span><span class="co">#&gt; Loading required package: BiocGenerics</span></span>
-<span><span class="co">#&gt; Loading required package: generics</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'generics'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,</span></span>
-<span><span class="co">#&gt;     setequal, union</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'BiocGenerics'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     IQR, mad, sd, var, xtabs</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
-<span><span class="co">#&gt;     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
-<span><span class="co">#&gt;     get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,</span></span>
-<span><span class="co">#&gt;     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span></span>
-<span><span class="co">#&gt;     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,</span></span>
-<span><span class="co">#&gt;     unsplit, which.max, which.min</span></span>
-<span><span class="co">#&gt; Loading required package: S4Vectors</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'S4Vectors'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:utils':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     findMatches</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     expand.grid, I, unname</span></span>
-<span><span class="co">#&gt; Loading required package: IRanges</span></span>
-<span><span class="co">#&gt; Loading required package: Seqinfo</span></span>
-<span><span class="co">#&gt; Loading required package: Biobase</span></span>
-<span><span class="co">#&gt; Welcome to Bioconductor</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     Vignettes contain introductory material; view with</span></span>
-<span><span class="co">#&gt;     'browseVignettes()'. To cite Bioconductor, see</span></span>
-<span><span class="co">#&gt;     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'Biobase'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:MatrixGenerics':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     rowMedians</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     anyMissing, rowMedians</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2" class="external-link">DESeq2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">apeglm</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_se</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">apeglm</span><span class="op">)</span>    </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rlang.r-lib.org" class="external-link">rlang</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">utils</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 1: Evaluate how model preforms using different threshold values and choose a threshold</span></span>
-<span><span class="va">example_se_filtering_assessment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/determine_filter_threshold.html">determine_filter_threshold</a></span><span class="op">(</span><span class="va">example_se</span><span class="op">)</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span></span>
-<span><span class="co"># Step 2; Filter low expression genes</span></span>
-<span><span class="va">se_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_low_exp_genes.html">filter_low_exp_genes</a></span><span class="op">(</span><span class="va">example_se</span>, min_count_per_group <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Genes after filtering: 50 </span></span>
-<span><span class="co">#&gt; colData names: cell_id cell_type batch</span></span>
-<span></span>
-<span><span class="co"># Step 3: Run the DESeq2 pipeline to get differential gene expression results</span></span>
-<span><span class="va">se_dge</span><span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_DESeq2.html">run_DESeq2</a></span><span class="op">(</span><span class="va">se_filtered</span><span class="op">)</span></span>
-<span><span class="co">#&gt; converting counts to integer mode</span></span>
-<span><span class="co">#&gt; estimating size factors</span></span>
-<span><span class="co">#&gt; estimating dispersions</span></span>
-<span><span class="co">#&gt; gene-wise dispersion estimates</span></span>
-<span><span class="co">#&gt; mean-dispersion relationship</span></span>
-<span><span class="co">#&gt; -- note: fitType='parametric', but the dispersion trend was not well captured by the</span></span>
-<span><span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span></span>
-<span><span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span></span>
-<span><span class="co">#&gt; final dispersion estimates</span></span>
-<span><span class="co">#&gt; fitting model and testing</span></span>
-<span></span>
-<span><span class="co"># Step 4: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates</span></span>
-<span><span class="va">se_dge_shrink</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/log2_shrinkage.html">log2_shrinkage</a></span><span class="op">(</span><span class="va">se_dge</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using 'apeglm' for LFC shrinkage. If used in published research, please cite:</span></span>
-<span><span class="co">#&gt;     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for</span></span>
-<span><span class="co">#&gt;     sequence count data: removing the noise and preserving large differences.</span></span>
-<span><span class="co">#&gt;     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895</span></span>
-<span></span>
-<span><span class="co"># Step 5: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function</span></span>
-<span><span class="va">example_se_volcano</span><span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_volcano.html">generate_volcano</a></span><span class="op">(</span><span class="va">se_dge_shrink</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Step 6: Generate the regulation summary of the genes</span></span>
-<span><span class="va">DESeq2_gene_reg_summary</span><span class="op">&lt;-</span> <span class="fu"><a href="../reference/gene_regulation_summary.html">gene_regulation_summary</a></span><span class="op">(</span><span class="va">se_dge_shrink</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Step 7: Export final results</span></span>
-<span><span class="va">example_se_exports</span><span class="op">&lt;-</span> <span class="fu"><a href="../reference/export_outputs.html">export_outputs</a></span><span class="op">(</span>res_df <span class="op">=</span> <span class="va">se_dge_shrink</span>, summary_df <span class="op">=</span> <span class="va">DESeq2_gene_reg_summary</span>, filtering_diag <span class="op">=</span> <span class="va">example_se_filtering_assessment</span>, volcano <span class="op">=</span> <span class="va">example_se_volcano</span>, output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"de_output"</span><span class="op">)</span> <span class="op">)</span></span>
-<span><span class="co">#&gt; Export complete. Files saved:</span></span>
-<span><span class="co">#&gt; /tmp/RtmpJCwXnf/de_output/de_results.tsv</span></span>
-<span><span class="co">#&gt; /tmp/RtmpJCwXnf/de_output/de_summary.tsv</span></span>
-<span><span class="co">#&gt; /tmp/RtmpJCwXnf/de_output/filtering_diagnostics.tsv</span></span>
-<span><span class="co">#&gt; /tmp/RtmpJCwXnf/de_output/volcano_plot.pdf</span></span>
-<span><span class="co">#&gt; /tmp/RtmpJCwXnf/de_output/volcano_plot.png</span></span></code></pre></div>
+<span><span class="co">#example SummarizeExperiment Data Set</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_se"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-3-start-the-differential-gene-expression-analysis-1">Step 3: Start the Differential Gene Expression Analysis<a class="anchor" aria-label="anchor" href="#step-3-start-the-differential-gene-expression-analysis-1"></a>
+</h3>
+<div class="section level4">
+<h4 id="step-3-1-determine-the-low-expression-filter-threshold-1">Step 3.1: Determine the Low Expression Filter Threshold<a class="anchor" aria-label="anchor" href="#step-3-1-determine-the-low-expression-filter-threshold-1"></a>
+</h4>
+<p>Evaluate model performance across different threshold values and
+select the best one.Replace <code>group_var</code> with the column to be
+categorized. Default <code>group_var</code> = “cell-type”. Replace
+<code>ref_level</code> with a specific cell type to be reference.
+Default <code>re_level</code> = “Tconv”. Replace <code>assay_name</code>
+with the appropriate label. Default `assay_name = “counts”.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_se_filtering_assessment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/determine_filter_threshold.html">determine_filter_threshold</a></span><span class="op">(</span></span>
+<span>  se_ln             <span class="op">=</span> <span class="va">example_se</span>,</span>
+<span>  count_thresholds  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>,</span>
+<span>  assay_name        <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  ref_level         <span class="op">=</span> <span class="st">"Tconv"</span>,</span>
+<span>  group_var         <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
+<span>  p_threshold       <span class="op">=</span> <span class="fl">0.05</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-2-filter-low-expression-genes-1">Step 3.2: Filter Low Expression Genes<a class="anchor" aria-label="anchor" href="#step-3-2-filter-low-expression-genes-1"></a>
+</h4>
+<p>Using the threshold value determined in Step 1, manually replace the
+<code>min_count_per_gene</code> variable and filter. Use the same SE
+utilized in Step 1. Default <code>min_count_per_gene</code> = 10.
+Replace <code>assay_name</code> with the appropriate label. Default
+`assay_name = “counts”.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">se_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_low_exp_genes.html">filter_low_exp_genes</a></span><span class="op">(</span></span>
+<span>  se_ln               <span class="op">=</span> <span class="va">example_se</span>,</span>
+<span>  min_count_per_group <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  assay_name          <span class="op">=</span> <span class="st">"counts"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-3-differential-gene-expression-analysis-via-deseq2-1">Step 3.3: Differential Gene Expression Analysis via DESeq2<a class="anchor" aria-label="anchor" href="#step-3-3-differential-gene-expression-analysis-via-deseq2-1"></a>
+</h4>
+<p>With the remaining filtered genes, preform DESeq2 to analyze the gene
+expression. Replace <code>group_var</code> with the column to be
+categorized. Default <code>group_var</code> = “cell-type”. Replace
+<code>ref_level</code> with a specific cell type to be reference.
+Default <code>re_level</code> = “Tconv”</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">se_dge</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_DESeq2.html">run_DESeq2</a></span><span class="op">(</span></span>
+<span>  se_ln     <span class="op">=</span> <span class="va">se_filtered</span>, </span>
+<span>  group_var <span class="op">=</span> <span class="st">"cell_type"</span>, </span>
+<span>  ref_level <span class="op">=</span> <span class="st">"Tconv"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-4-apply-log2_shrinkage-on-deseq2-results-to-improve-estimates--1">Step 3.4: Apply log2_shrinkage on DESeq2 results to improve
+estimates.<a class="anchor" aria-label="anchor" href="#step-3-4-apply-log2_shrinkage-on-deseq2-results-to-improve-estimates--1"></a>
+</h4>
+<p>Replace <code>shrinkage</code> with the appropriate GLM estimator.
+Default <code>shrinkage</code> = “apeglm”.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">se_dge_shrink</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/log2_shrinkage.html">log2_shrinkage</a></span><span class="op">(</span></span>
+<span>  dds       <span class="op">=</span> <span class="va">se_dge</span>, </span>
+<span>  shrinkage <span class="op">=</span> <span class="st">"apeglm"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-5-intrepret-the-gene-regulation-1">Step 3.5: Intrepret the Gene Regulation<a class="anchor" aria-label="anchor" href="#step-3-5-intrepret-the-gene-regulation-1"></a>
+</h4>
+<p>Summarize the non-significant and up and down regulated genes in the
+data set. Replace <code>p_threshold</code> with the appropriate adjusted
+p-value threshold. Default <code>p_threshold</code> = 0.05. Replace
+<code>fc_threshold</code> with the appropriate fold-change threshold.
+Default <code>fc_threshold</code> = 0.5.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">DESeq2_gene_reg_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gene_regulation_summary.html">gene_regulation_summary</a></span><span class="op">(</span></span>
+<span>  res_df       <span class="op">=</span> <span class="va">se_dge_shrink</span>,</span>
+<span>  p_threshold  <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  fc_threshold <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-6-visualize-expression-1">Step 3.6: Visualize Expression<a class="anchor" aria-label="anchor" href="#step-3-6-visualize-expression-1"></a>
+</h4>
+<p>Generate a volcano plot to visualize the
+<code>gene_reg_summary</code> results. Use the same
+<code>p_threshold</code> and <code>fc_threshold</code> values utilized
+in Step 5. Replace <code>set_title</code> with the correct title.
+Default <code>set_title</code> = “Volcano Plot - Lymph Node Treg vs
+Tconv”. Replace <code>xlab</code> with the correct x-axis title. Default
+<code>xlab</code> = “log2 Fold Change (Treg vs Tconv)”.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_se_volcano</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_volcano.html">generate_volcano</a></span><span class="op">(</span></span>
+<span>  res_df       <span class="op">=</span> <span class="va">se_dge_shrink</span>,</span>
+<span>  fc_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  xlab         <span class="op">=</span> <span class="st">"log2 Fold Change (Treg vs Tconv)"</span>,</span>
+<span>  set_title    <span class="op">=</span> <span class="st">"Volcano Plot - Lymph Node Treg vs Tconv"</span>,</span>
+<span>  p_threshold  <span class="op">=</span> <span class="fl">0.05</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="step-3-7-export-results">Step 3.7: Export Results<a class="anchor" aria-label="anchor" href="#step-3-7-export-results"></a>
+</h4>
+<p>Export the se_dge_shrink, DESeq2_gene_reg_summary,
+example_se_filtering_assessment data frames as TSV tables and volcano
+plots as a PDF and PNG images. Outputs will export as “de_output” to
+current working directory unless explicitly indicated.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_se_exports</span><span class="op">&lt;-</span> <span class="fu"><a href="../reference/export_outputs.html">export_outputs</a></span><span class="op">(</span></span>
+<span>  res_df         <span class="op">=</span> <span class="va">se_dge_shrink</span>,</span>
+<span>  summary_df     <span class="op">=</span> <span class="va">DESeq2_gene_reg_summary</span>,</span>
+<span>  filtering_diag <span class="op">=</span> <span class="va">example_se_filtering_assessment</span>,</span>
+<span>  volcano        <span class="op">=</span> <span class="va">example_se_volcano</span>,</span>
+<span>  output_dir     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"de_output"</span><span class="op">)</span> </span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
+</h2>
+<p>JW26ADS8192 <strong>R-package</strong> includes an additional
+function (7 total functions) which collectively generates and exports
+filtering_analysis.tsv, dge_shrink.tsv, volcano_plot.pdf, and
+volcano_plot.png to current working directory. JW26ADS8192
+<strong>CLI</strong> only includes 6 functions, which generate and
+export deliverable within a single step.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
