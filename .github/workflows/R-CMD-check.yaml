@@ -45,8 +45,22 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Install Bioconductor dependencies
+        run: |
+          install.packages("BiocManager")
+          BiocManager::install(c(
+            "DESeq2",
+            "apeglm",
+            "SummarizedExperiment",
+            "BiocGenerics",
+            "S4Vectors",
+            "IRanges",
+            "Biobase",
+            "MatrixGenerics"
+          ), ask = FALSE)
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-

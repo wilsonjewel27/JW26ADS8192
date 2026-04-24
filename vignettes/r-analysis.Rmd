@@ -6,22 +6,23 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-### Designed for RNA-seq workflows, **JW26ADS8192** provides a streamlined pipeline to differential expression results. Use a SummarizedExperiment object through the R package interface
+Designed for RNA-seq workflows, **JW26ADS8192** provides a streamlined pipeline to differential expression results. Use a SummarizedExperiment object through the R package interface
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+load("prebuilt_data.RData")
 ```
 
 ---
 
 ## Step 1: Install JW26ADS8192 from GitHub
-```{r installation}
+```r
 remotes::install_github("wilsonjewel27/JW26ADS8192")
 ```
 
 ---
 
 ## Step 2: Load the following libraries & example dataset
-```{r load}
+```r
 #Required Libraries
 library(JW26ADS8192)
 library(ggplot2)
@@ -35,7 +36,6 @@ library(readr)
 
 #example SummarizeExperiment Data Set
 data("example_se")
-
 ```
 
 ---
@@ -44,7 +44,7 @@ data("example_se")
 
 ### Step 3.1: Determine the Low Expression Filter Threshold
 Evaluate model performance across different threshold values and select the best one.Replace `group_var` with the column to be categorized. Default `group_var` = "cell-type". Replace `ref_level` with a specific cell type to be reference. Default `re_level` = "Tconv". Replace `assay_name` with the appropriate label. Default `assay_name = "counts".  
-```{r determine_filter_threshold}
+```r
 example_se_filtering_assessment <- determine_filter_threshold(
   se_ln             = example_se,
   count_thresholds  = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
@@ -53,14 +53,18 @@ example_se_filtering_assessment <- determine_filter_threshold(
   group_var         = "cell_type",
   p_threshold       = 0.05
   )
-
+  
 example_se_filtering_assessment
-
 ```
+```{r determine_filter_threshold, echo=FALSE}
+example_se_filtering_assessment
+```
+
+
 
 ### Step 3.2: Filter Low Expression Genes
 Using the threshold value determined in Step 1, manually replace the `min_count_per_gene` variable and filter. Use the same SE utilized in Step 1. Default `min_count_per_gene` = 10. Replace `assay_name` with the appropriate label. Default `assay_name = "counts".  
-```{r filter_low_exp_genes}
+```r
 se_filtered <- filter_low_exp_genes(
   se_ln               = example_se,
   min_count_per_group = 10,
@@ -70,7 +74,7 @@ se_filtered <- filter_low_exp_genes(
 
 ### Step 3.3: Differential Gene Expression Analysis via DESeq2
 With the remaining filtered genes, preform DESeq2 to analyze the gene expression. Replace `group_var` with the column to be categorized. Default `group_var` = "cell-type". Replace `ref_level` with a specific cell type to be reference. Default `re_level` = "Tconv"
-```{r run_DESeq}
+```r 
 se_dge <- run_DESeq2(
   se_ln     = se_filtered, 
   group_var = "cell_type", 
@@ -80,18 +84,21 @@ se_dge <- run_DESeq2(
 
 ### Step 3.4: Apply log2_shrinkage on DESeq2 results to improve estimates.
 Replace `shrinkage` with the appropriate GLM estimator. Default `shrinkage` = "apeglm".
-```{r log2_shrinkage}
+```r
 se_dge_shrink <- log2_shrinkage(
   dds       = se_dge, 
   shrinkage = "apeglm"
   )
 
+se_dge_shrink
+```
+```{r log2_shrinkage, echo=FALSE}
 head(se_dge_shrink)
 ```
 
 ### Step 3.5: Intrepret the Gene Regulation
 Summarize the non-significant and up and down regulated genes in the data set. Replace `p_threshold` with the appropriate adjusted p-value threshold. Default `p_threshold` = 0.05. Replace `fc_threshold` with the appropriate fold-change threshold. Default `fc_threshold` = 0.5. 
-```{r gene_regulation_summary}
+```r
 DESeq2_gene_reg_summary <- gene_regulation_summary(
   res_df       = se_dge_shrink,
   p_threshold  = 0.05,
@@ -100,10 +107,13 @@ DESeq2_gene_reg_summary <- gene_regulation_summary(
 
 DESeq2_gene_reg_summary
 ```
+```{r gene_regulation_summary, echo=FALSE}
+DESeq2_gene_reg_summary
+```
 
 ### Step 3.6: Visualize Expression
 Generate a volcano plot to visualize the `gene_reg_summary` results. Use the same `p_threshold` and `fc_threshold` values utilized in Step 5. Replace `set_title` with the correct title. Default `set_title` = "Volcano Plot - Lymph Node Treg vs Tconv". Replace `xlab` with the correct x-axis title. Default `xlab` = "log2 Fold Change (Treg vs Tconv)".
-```{r generate_volcano}
+```r
 example_se_volcano <- generate_volcano(
   res_df       = se_dge_shrink,
   fc_threshold = 0.5,
@@ -111,7 +121,11 @@ example_se_volcano <- generate_volcano(
   set_title    = "Volcano Plot - Lymph Node Treg vs Tconv",
   p_threshold  = 0.05
   )
+
 example_se_volcano
+```
+```{r generate_volcano, echo=FALSE}
+example_se_volcano 
 ```
 
 ### Step 3.7: Export Results
