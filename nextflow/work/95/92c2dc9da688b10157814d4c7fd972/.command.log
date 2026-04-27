@@ -1,0 +1,14 @@
+Generating volcano plot...
+Error in `ggsave()` at JW26ADS8192/exec/ADS8192.R:377:5:
+! Cannot find directory './results//volcano_plot'.
+i Please supply an existing directory or use `create.dir = TRUE`.
+Backtrace:
+    x
+ 1. \-Rapp::run()
+ 2.   \-base::eval(app$exprs, env <- new.env(parent = globalenv()))
+ 3.     \-base::eval(app$exprs, env <- new.env(parent = globalenv()))
+ 4.       \-ggplot2::ggsave(...) at JW26ADS8192/exec/ADS8192.R:377:5
+ 5.         \-ggplot2:::validate_path(path, filename, create.dir)
+ 6.           \-cli::cli_abort(...)
+ 7.             \-rlang::abort(...)
+Execution halted

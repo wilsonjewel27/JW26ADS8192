@@ -7,7 +7,7 @@ process filter_low_exp_genes{
     path metadata
 
     output:
-    path 'results/se_filtered.tsv'
+    path 'results/se_filtered.rds'
 
     script:
     """

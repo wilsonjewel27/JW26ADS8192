@@ -6,7 +6,7 @@ process log2_shrinkage{
     path se_dge
 
     output:
-    tuple path ('results/dge_shrink.rds'), path ('results/dge_shrink.tsv')
+    path 'results/dge_shrink.rds'
 
     script:
     """

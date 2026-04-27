@@ -13,7 +13,7 @@ process run_DESeq2{
     JW26ADS8192 run_DESeq2          \\
     --input     ${se_filtered}      \\
     --output    ./results/          \\
-    --group_var ${params.group_var} \\ 
+    --group_var ${params.group_var} \\
     --ref_level ${params.ref_level}
     
     """

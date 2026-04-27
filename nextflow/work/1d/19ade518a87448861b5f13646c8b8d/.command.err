@@ -1,0 +1,7 @@
+Applying Log2fold-Change Shrinkage...
+using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    sequence count data: removing the noise and preserving large differences.
+    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+Saved: ./results//dge_shrink.tsv
+Done.
