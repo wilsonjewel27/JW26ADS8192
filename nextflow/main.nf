@@ -5,17 +5,17 @@
 
 
 // inputs
-params.counts = 'counts.tsv'  
-params.meta    = 'meta.tsv'
-params.outdir  = './results'
+params.counts      = '/home/jewel-wilson/JW26ADS8192/tests/testdata/example_counts.tsv'  
+params.metadata    = '/home/jewel-wilson/JW26ADS8192/tests/testdata/example_meta.tsv'
+params.outdir      = './results'
 
 // default specifications
 params.min_count_per_group = 10
-params. group_var          = 'cell-type'
-params.re_level            = 'Tconv'
+params.group_var           = 'cell-type'
+params.ref_level           = 'Tconv'
 params.shrinkage           = 'apeglm'
-params.p_threshold         = '0.05'
-params.fc_threshold        = '0.5'
+params.p_threshold         =  0.05 
+params.fc_threshold        =  0.5
 params.set_title           = 'Volcano Plot: Lymph Node Treg vs Tconv'
 params.xlab                = 'log2 Fold Change (T-reg vs Tconv)'
 
@@ -32,22 +32,22 @@ workflow {
     main:
         // Student: you may need to adjust the following line based on the params (input argument) you have above
         ch_counts = channel.fromPath(params.counts,   checkIfExists: true)
-        ch_meta   = channel.fromPath(params.metadata, checkIfExists: true)
+        ch_metadata   = channel.fromPath(params.metadata, checkIfExists: true)
         
         // Step 1: Review the results of filtering_analysis.tsv to pick the most optimal threshold value
-        determine_filter_threshold(ch_counts, ch_meta)
+        determine_filter_threshold(ch_counts, ch_metadata)
 
         // Step 2: Use the previously determined value to replace 'min_count_per_group'. Default 'min_count_per_group' = 10
-        filter_low_exp_genes(ch_counts, ch_meta)
+        filter_low_exp_genes(ch_counts, ch_metadata)
 
         // Step 3: Run the Differential Analysis via DESeq2
-        run_DESeq2(filter_low_exp_genes.out)
+        run_DESeq2(filter_low_exp_genes.out[0])
 
         // Step 4: Apply the Log2 Fold Change shrinkage for mroe reliable estimates
         log2_shrinkage(run_DESeq2.out)
 
         // Step 5: Summarize the amount of low, high, and non-singificant expression genes
-        gene_regulation_summary(log2_shrinkage.out)
+        gene_regulation_summary(log2_shrinkage.out[0])
 
         // Step 6: Visulaize Results in a Volcano Plot
         generate_volcano(log2_shrinkage.out)
@@ -64,7 +64,7 @@ workflow {
 
 output {
     results {
-        path params.outdir
+        path "${params.outdir}"
         mode 'copy'
     }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env Rapp
 #| name: JW26ADS8192
-#| title: JW26ADS8192 Differential Expression with DESeq2
-#| description: DESeq2 analysis for SummarizedExperiment data. Requires SummarizedExperiment RDS file.
+#| title: JW26ADS8192 Differential Gene Expression with DESeq2
+#| description: DESeq2 analysis for count matrix and sample metadata.
 
 suppressPackageStartupMessages({
   library(JW26ADS8192)
@@ -11,6 +11,7 @@ suppressPackageStartupMessages({
   library(SummarizedExperiment)
   library(DESeq2)
   library(apeglm)
+  library(rlang)
 })
 
 # Helper to read TSV/CSV (not exported; kept in CLI script)
@@ -26,47 +27,58 @@ read_data_file <- function(path) {
 
 switch(
   "",
-  #| title: Step 1: Determine Minimal Number of Gene Counts
-  #| description: Use this command to determine the most optimal minimal number of gene counts. The results will determine the low gene expression filter threshold. Requires count matrix and sample metadata
-  filter_threshold = {
-    #| description: Path to count matrix (TSV/CSV, genes x samples)
+  #| title: Step 1 Determine Minimal Number of Gene Counts
+  #| description: Determine optimal minimal gene count threshold.
+  determine_filter_threshold = {
+    #| description:  Path to count matrix TSV or CSV.
     #| short: c
     counts <- ""
 
     #| description: Path to sample metadata
     #| short: m
-    meta = ""
+    meta <- ""
 
     #| description: output directory
     #| short: o
     output <- ""
 
-    #| description: Metadata column for grouping (e.g. "cell_type")
+    #| description: the tested minimun gene counts
+    #| short: t
+    count_thresholds <- "0,1,5,10,20,50,100,200,500"
+
+    #| description: "Metadata column for grouping e.g. cell_type"
     #| short: g
     group_var <- "cell_type"
 
-    #| description: Referefence level for comparison (e.g. "Tconv")
+    #| description: "Referefence level for comparison e.g. Tconv"
     #| short: r
     ref_level <- "Tconv"
 
-    #| description: Name of assay to use (e.g. "counts")
+    #| description: "Name of assay to use e.g. counts"
     #| short: a
     assay_name <- "counts"
 
-    #| description: Significance threshold for adjusted p-value (default: 0.05)
-    #| short: p
+    #| description: Adjusted p-value threshold. default 0.05
+    #| short:  p
     p_threshold <- 0.05
 
     #Validation
-    if (meta == "" || count == "" || output == "" || group_var == "" || ref_level == "" || assay_name == ""){
+    if (meta == "" || counts == "" || output == "" || group_var == "" || ref_level == "" || assay_name == ""){
       stop ("--meta, --count, --output, --group_var, --ref_level, --assay_name are required", call. = FALSE)
-      }
-
-    if (!file.exists(input)){
-      stop( "File not found:", input, call. = FALSE)
     }
 
+    if (!file.exists(counts)){
+      stop("File not found: ", counts, call. = FALSE)
+    }
+
+    if (!file.exists(meta)){
+      stop("File not found: ", meta,   call. = FALSE)
+      }
+
     if (!dir.exists(output))dir.create(output, recursive = TRUE)
+
+    # Parse count_thresholds from comma-separated string to numeric vector
+    count_thresholds <- as.numeric(strsplit(count_thresholds, ",")[[1]])
 
     # Read inputs
     counts_df <- read_data_file(counts)
@@ -98,36 +110,38 @@ switch(
     message("Done.")
           },
 
-  #| title: Step 2: Filter Low Expression Genes
-  #| description: After determining the minimal gene expression for the most optimal results, use this function to filter those genes out. Requires manual adjustment of "min_count_per_group"
+  #| title: Step 2 Filter Low Expression Genes
+  #| description: Filter low expression genes by count threshold.
   filter_low_exp_genes = {
-    #| description: Path to count matrix (TSV/CSV, genes x samples)
+    #| description: Path to count matrix TSV or CSV.
     #| short: c
     counts <- ""
 
     #| description: Path to sample metadata
     #| short: m
-    meta = ""
+    meta <- ""
 
     #| description: output directory
     #| short: o
     output <- ""
 
-    #| description: The low expression gene count threshold (default: 10). May require adjustment.
+    #| description: Min count threshold. default 10.
     #| short: e
     min_count_per_group <- 10
 
-    #| description: Name of assay to use (e.g. "counts")
+    #| description: "Name of assay to use e.g. counts"
     #| short: a
     assay_name <- "counts"
 
     #Validation
-    if (input == "" || output == "" || assay_name == ""){
+    if (counts == "" || meta == "" || output == "" || assay_name == ""){
       stop ("--input, --output, --assay_name are required", call. = FALSE)
     }
-
-    if (!file.exists(input)){
-      stop( "File not found:", input, call. = FALSE)
+    if (!file.exists(counts)){
+      stop("File not found: ", counts, call. = FALSE)
+    }
+    if (!file.exists(meta)){
+      stop("File not found: ", meta,   call. = FALSE)
     }
 
     if (!dir.exists(output))dir.create(output, recursive = TRUE)
@@ -158,8 +172,8 @@ switch(
     message("Done.")
   },
 
-  #| title: Step 3: Preform DESeq2 analysis
-  #| description: use DESeq2 to perform differential gene expression analysis
+  #| title: Step 3 Preform DESeq2 analysis
+  #| description: Run DESeq2 differential expression analysis.
   run_DESeq2 = {
     #| description: Path to se_filtered
     #| short: i
@@ -169,11 +183,11 @@ switch(
     #| short: o
     output <- ""
 
-    #| description: Metadata column for grouping (e.g. "cell_type")
+    #| description: "Metadata column for grouping e.g. cell_type"
     #| short: g
     group_var <- "cell_type"
 
-    #| description: Referefence level for comparison (e.g. "Tconv")
+    #| description: "Referefence level for comparison e.g. Tconv"
     #| short: r
     ref_level <- "Tconv"
 
@@ -208,8 +222,8 @@ switch(
 
   },
 
-  #| title: Step 4: Log2fold-Change Shrinkage
-  #| description: Apply log2fold-change shrinkage for more reliable effect-size estimates
+  #| title: Step 4 Log2fold-Change Shrinkage
+  #| description: Apply log2fold-change shrinkage.
   log2_shrinkage = {
     #| description: Path to se_dge
     #| short: i
@@ -219,7 +233,7 @@ switch(
     #| short: o
     output <- ""
 
-    #| description: The estimator used to assess the glm coefficeints (default: "apeglm")
+    #| description: GLM estimator. default apeglm
     #| short: s
     shrinkage <-  "apeglm"
 
@@ -257,8 +271,8 @@ switch(
     message("Done.")
   },
 
-  #| title: Step 5: Intrepret Gene Regulation
-  #| description: Summarize the the number of genes that are up, down and non-significantly regulated
+  #| title: Step 5 Intrepret Gene Regulation
+  #| description: Summarize up, down and non-significant genes.
   gene_regulation_summary = {
     #| description: Path to se_dge_shrink
     #| short: i
@@ -268,11 +282,11 @@ switch(
     #| short: o
     output <- ""
 
-    #| description: Significance threshold for adjusted p-value (default: 0.05)
+    #| description: Adjusted p-value threshold. default 0.05
     #| short: p
     p_threshold <- 0.05
 
-    #| description: fold change threshold (default: 0.5)
+    #| description: fold change threshold. default 0.5
     #| short: f
     fc_threshold <-  0.5
 
@@ -311,8 +325,8 @@ switch(
     message("Done.")
   },
 
-  #| title: Step 6: Visualize Expression in a Volcano Plot
-  #| description: Returns a volcano plot and highlights significant genes
+  #| title: Step 6 Visualize Expression in a Volcano Plot
+  #| description: Generate a volcano plot of DE results.
   generate_volcano = {
     #| description: Path to se_dge_shrink
     #| short: i
@@ -322,19 +336,19 @@ switch(
     #| short: o
     output <- ""
 
-    #| description: Significance threshold for adjusted p-value (default: 0.05)
+    #| description: Adjusted p-value threshold. default 0.05
     #| short: p
     p_threshold <- 0.05
 
-    #| description: fold change threshold (default: 0.5)
+    #| description: fold change threshold. default 0.5
     #| short: f
     fc_threshold <-  0.5
 
-    #| description: Set the title of the plot (default: "Volcano Plot - Lymph Node Treg vs Tconv")
+    #| description: Plot title. default Volcano Plot
     #| short: t
-    set_title <- "Volcano Plot - Lymph Node Treg vs Tconv"
+    set_title <- "Volcano Plot: Lymph Node Treg vs Tconv"
 
-    #| description: set the name of the x-axis(default: "log2 Fold Change (Treg vs Tconv)")
+    #| description: X-axis label. default log2 Fold Change
     #| short: x
     xlab <- "log2 Fold Change (Treg vs Tconv)"
 
@@ -366,9 +380,8 @@ switch(
     saveRDS(example_se_volcano, file.path(output, "volcano_plot.rds"))
 
     #export results as pdf and png
-    out_file <- file.path(output, "volcano_plot")
-    ggsave(filename="volcano_plot.pdf", plot=example_se_volcano, width=5, height = 5, path = out_file)
-    ggsave(filename="volcano_plot.png",plot=example_se_volcano, width=5, height = 5, units = "in", dpi = 300, path = out_file)
+    ggsave(filename="volcano_plot.pdf", plot=example_se_volcano, width=5, height = 5, path = output)
+    ggsave(filename="volcano_plot.png",plot=example_se_volcano, width=5, height = 5, units = "in", dpi = 300, path = output)
 
     #confirmations
     message("Saved: ", out_file)
