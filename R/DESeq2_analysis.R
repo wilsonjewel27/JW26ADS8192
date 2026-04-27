@@ -10,6 +10,7 @@
 #'
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom DESeq2 DESeqDataSet DESeq results
+#' @importFrom stats relevel as.formula
 #' @export
 #'
 #' @examples

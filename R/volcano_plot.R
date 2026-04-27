@@ -7,13 +7,14 @@
 #' @param xlab The label of the x-axis
 #' @param set_title The title of the plot
 #' @param p_threshold The threshold that defines a gene's significance (default: 0.05)
-
+#'
 #'
 #' @return volcano pot with significant genes highlighted
 #'
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom ggplot2 ggplot geom_point scale_color_manual theme_bw labs geom_vline geom_hline aes
 #' @importFrom apeglm apeglm
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -25,11 +26,16 @@
 #' # Step 2: Run the DESeq2 pipeline to get differential gene expression results
 #'  se_dge<- run_DESeq2(se_filtered)
 #'
-#' # Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+#' # Step 3: Run log2_shrinkage on DESeq2 results to improve estimates
 #' se_dge_shrink <- log2_shrinkage(se_dge)
 #'
-#' # Step 4: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
-#' example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05)
+#' # Step 4: Generate a volcano plot from log2_shrinkage results
+#' example_se_volcano<- generate_volcano(
+#' res_df = se_dge_shrink,
+#' fc_threshold =  0.5,
+#' xlab = "log2 Fold Change (Treg vs Tconv)",
+#'set_title = "Volcano Plot - Lymph Node Treg vs Tconv",
+#'p_threshold = 0.05)
 #'
 generate_volcano<- function(res_df, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)",
                             set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05){
@@ -45,7 +51,7 @@ generate_volcano<- function(res_df, fc_threshold =  0.5, xlab = "log2 Fold Chang
   res_df$neg_log10p <- as.numeric(-log10(res_df$pvalue))
   res_df$log2FoldChange <- as.numeric(res_df$log2FoldChange)
 #build the plot
-  v_plot <- ggplot(res_df, aes(x = log2FoldChange, y = neg_log10p, color = direction)) +
+  v_plot <- ggplot(res_df, aes(x = .data$log2FoldChange, y = .data$neg_log10p, color = .data$direction)) +
     geom_point(size = 0.8, alpha = 0.6) +
     scale_color_manual(values = c(down = "blue", ns = "grey70", up = "red")) +
     theme_bw(base_size = 14) +

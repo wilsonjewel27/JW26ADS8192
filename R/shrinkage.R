@@ -21,7 +21,7 @@
 #' # Step 2: Run the DESeq2 pipeline to get differential gene expression results
 #'  se_dge<- run_DESeq2(se_filtered)
 #'
-#' # Step 3: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+#' # Step 3:Run log2_shrinkage on DESeq2 results to improve estimates
 #' se_dge_shrink <- log2_shrinkage(dds = se_dge, shrinkage = "apeglm")
 #'
 log2_shrinkage<- function(dds, shrinkage = "apeglm"){
