@@ -1,1 +1,51 @@
-r-package/README.md
+
+# JW26ADS8192
+
+JW26ADS8192 provides a tool that preforms Differential Gene Analysis on
+SummarizedExperiment Objects.
+
+## Installation
+
+``` r
+# Install from GitHub
+remotes::install_github("wilsonjewel27/JW26ADS8192")
+```
+
+## Quick Start
+
+``` r
+
+library(JW26ADS8192)
+
+#load example data
+data(example_se)
+
+#Assess the 'minimun gene count' filtering threshold to determine the best threshold.
+example_se_filtering_assessment<- determine_filter_threshold(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
+
+#Filter out the low expression gene
+se_filtered <- filter_low_exp_genes(se_ln = example_se, min_count_per_group = 10, assay_name = "counts")
+
+#Run the DESeq2 pipeline
+se_dge<- run_DESeq2(se_ln = se_filtered, group_var = "cell_type", ref_level = "Tconv")
+
+#Apply the log2fold-change shrinkage for more reliable effect-size estimates
+se_dge_shrink <- log2_shrinkage(dds = se_dge, shrinkage = "apeglm")
+
+#Summarize the number of upregulated, down regulated and non-signficant genes in a dataframe
+DESeq2_gene_reg_summary<- gene_regulation_summary(res_df = se_dge_shrink, p_threshold = 0.05, fc_threshold =  0.5)
+
+#Generate the volcano plot corresponging to the gene regulation summary dataframe
+example_se_volcano<- generate_volcano(res_df = se_dge_shrink, fc_threshold =  0.5, xlab = "log2 Fold Change (Treg vs Tconv)", set_title = "Volcano Plot - Lymph Node Treg vs Tconv", p_threshold = 0.05)
+
+#Export the filtering threhold assessment, differential expression results and Expression-Count summary to TSV files & the volcano plot to pdf and png
+example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path("ADD/YOUR/PATH", "de_output") )
+```
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+<!-- badges: start -->
+[![pkgdown](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml)
+<!-- badges: end -->
