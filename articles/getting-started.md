@@ -1,267 +1,165 @@
-# Getting Started with JW26ADS8192
+# Getting Started with ADS8192
 
 ## Introduction
 
-Designed for RNA-seq workflows, **JW26ADS8192** provides a streamlined
-pipeline to differential expression results. Use a SummarizedExperiment
-object through the R package interface, or supply raw count matrices and
-sample metadata (TSV/CSV) directly via the command-line interface.
+JW26ADS8192 makes it easy to run Differential Gene Expression Analysis
+(via DESeq2) using RNA-seq data stored in SummarizeExperiment objects.
 
-------------------------------------------------------------------------
-
-## Analysis via Command-Line Interface (Rapp): Quick Example
-
-### Step 1: Install JW26ADS8192 from GitHub
-
-``` bash
-Rscript -e "Rapp::install_pkg_cli_apps('JW26ADS8192')"
-```
-
-### Step 2: Load example dataset and set paths
+## Quick Example
 
 ``` r
-ex_counts_path <- system.file("testdata", "example_counts.tsv", package = "JW26ADS8192")
-ex_meta_path   <- system.file("testdata", "example_meta.tsv", package = "JW26ADS8192")
-
-Sys.setenv(EX_COUNTS = ex_counts_path)
-Sys.setenv(EX_META   = ex_meta_path)
-```
-
-### Step 3: Start the Differential Gene Expression Analysis
-
-#### Step 3.1: Determine the Low Expression Filter Threshold
-
-Evaluate model performance across different threshold values and select
-the best one.
-
-``` bash
-JW26ADS8192 determine_filter_threshold --count $EX_COUNTS --meta $EX_META --output ./results/
-```
-
-Results output a **filtering_analysis.tsv** table in results folder.
-Success confirmation will read: “Saved as RDS. Done.”
-
-#### Step 3.2: Filter Low Expression Genes
-
-Using the threshold value determined in Step 1, manually replace the
-`min_count_per_gene` variable and filter. Default `min_count_per_gene` =
-10.
-
-``` bash
-JW26ADS8192 filter_low_exp_genes --count $EX_COUNTS --meta $EX_META --output ./results/
-```
-
-Success confirmation will read: “Saved as RDS. Done.” Output
-**se_filtered.rds** will be save in “./results/”
-
-#### Step 3.3: Differential Gene Expression Analysis via DESeq2
-
-With the remaining filtered genes, preform DESeq2 to analyze the gene
-expression. Replace `group_var` with the column to be categorized.
-Default `group_var` = “cell-type”. Replace `ref_level` with a specific
-cell type to be reference. Default `re_level` = “Tconv”
-
-``` bash
-JW26ADS8192 run_DESeq2 --input ./results/se_filtered.rds --output ./results/
-```
-
-Success confirmation will read: “Saved as RDS. Done.” Output
-**se_dge.rds** will be save in “./results/”
-
-#### Step 3.4: Apply log2_shrinkage on DESeq2 results to improve estimates.
-
-Replace `shrinkage` with the appropriate GLM estimator. Default
-`shrinkage` = “apeglm”
-
-``` bash
-JW26ADS8192 log2_shrinkage  --input ./results/se_dge.rds --output ./results/
-```
-
-Success confirmation will read: “Saved as RDS. Done.” Results output
-**dge_shrink.rds** and a **dge_shrink.tsv** table saved in “./results/”
-
-#### Step 3.5: Intrepret the Gene Regulation
-
-Summarize the non-significant and up and down regulated genes in the
-data set. Replace `p_threshold` with the appropriate adjusted p-value
-threshold. Default `p_threshold` = 0.05. Replace `fc_threshold` with the
-appropriate fold-change threshold. Default `fc_threshold` = 0.5.
-
-``` bash
-JW26ADS8192 gene_regulation_summary  --input ./results/dge_shrink.rds --output ./results/
-```
-
-Success confirmation will read: “Saved as RDS. Done.” Results output
-**gene_reg_summary.rds** and a **gene_reg_summary.tsv** table saved in
-“./results/”
-
-#### Step 3.6: Visualize Expression
-
-Generate a volcano plot to visualize the `gene_reg_summary` results. Use
-the same `p_threshold` and `fc_threshold` values utilized in Step 5.
-Replace `set_title` with the correct title. Default `set_title` =
-“Volcano Plot - Lymph Node Treg vs Tconv”. Replace `xlab` with the
-correct x-axis title. Default `xlab` = “log2 Fold Change (Treg vs
-Tconv)”.
-
-``` bash
-JW26ADS8192 generate_volcano --input ./results/dge_shrink.rds --output ./results/
-```
-
-Success confirmation will read: “Saved as RDS. Done.” Results output
-**volcano_plot.rds**, **volcano_plot.pdf**, and **volcano_plot.png**
-saved in “./results/”
-
-------------------------------------------------------------------------
-
-## Analysis via R Studio: Quick Example
-
-### Step 1: Install JW26ADS8192 from GitHub
-
-``` r
-remotes::install_github("wilsonjewel27/JW26ADS8192")
-```
-
-### Step 2: Load the following libraries & example dataset
-
-``` r
-#Required Libraries
 library(JW26ADS8192)
 library(ggplot2)
 library(SummarizedExperiment)
+#> Loading required package: MatrixGenerics
+#> Loading required package: matrixStats
+#> 
+#> Attaching package: 'MatrixGenerics'
+#> The following objects are masked from 'package:matrixStats':
+#> 
+#>     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+#>     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+#>     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+#>     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+#>     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+#>     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+#>     colWeightedMeans, colWeightedMedians, colWeightedSds,
+#>     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+#>     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+#>     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+#>     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+#>     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+#>     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+#>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+#>     rowWeightedSds, rowWeightedVars
+#> Loading required package: GenomicRanges
+#> Loading required package: stats4
+#> Loading required package: BiocGenerics
+#> Loading required package: generics
+#> 
+#> Attaching package: 'generics'
+#> The following objects are masked from 'package:base':
+#> 
+#>     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
+#>     setequal, union
+#> 
+#> Attaching package: 'BiocGenerics'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     IQR, mad, sd, var, xtabs
+#> The following objects are masked from 'package:base':
+#> 
+#>     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+#>     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+#>     get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,
+#>     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+#>     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,
+#>     unsplit, which.max, which.min
+#> Loading required package: S4Vectors
+#> 
+#> Attaching package: 'S4Vectors'
+#> The following object is masked from 'package:utils':
+#> 
+#>     findMatches
+#> The following objects are masked from 'package:base':
+#> 
+#>     expand.grid, I, unname
+#> Loading required package: IRanges
+#> Loading required package: Seqinfo
+#> Loading required package: Biobase
+#> Welcome to Bioconductor
+#> 
+#>     Vignettes contain introductory material; view with
+#>     'browseVignettes()'. To cite Bioconductor, see
+#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
+#> 
+#> Attaching package: 'Biobase'
+#> The following object is masked from 'package:MatrixGenerics':
+#> 
+#>     rowMedians
+#> The following objects are masked from 'package:matrixStats':
+#> 
+#>     anyMissing, rowMedians
 library(DESeq2)
-library(apeglm)    
-library(stats)
-library(rlang)
-library(utils)
-library(readr)
+library(apeglm)
+data(example_se)
 
-#example SummarizeExperiment Data Set
-data("example_se")
+# Step 1: Evaluate how model preforms using different threshold values and choose a threshold
+example_se_filtering_assessment <- determine_filter_threshold(example_se)
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> converting counts to integer mode
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+
+# Step 2; Filter low expression genes
+se_filtered <- filter_low_exp_genes(example_se, min_count_per_group = 10)
+#> Genes after filtering: 500 
+#> colData names: cell_id cell_type batch
+
+# Step 3: Run the DESeq2 pipeline to get differential gene expression results
+se_dge<- run_DESeq2(se_filtered)
+#> converting counts to integer mode
+#> estimating size factors
+#> estimating dispersions
+#> gene-wise dispersion estimates
+#> mean-dispersion relationship
+#> -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#>    function: y = a/x + b, and a local regression fit was automatically substituted.
+#>    specify fitType='local' or 'mean' to avoid this message next time.
+#> final dispersion estimates
+#> fitting model and testing
+
+# Step 4: Run the log2_shrinkage function on the results of the DESeq2 function to create more reliable estimates
+se_dge_shrink <- log2_shrinkage(se_dge)
+#> using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+#>     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+#>     sequence count data: removing the noise and preserving large differences.
+#>     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+
+# Step 5: Create a volcano plot of the gene expression using the results obtained from the log2_shrinkage function
+example_se_volcano<- generate_volcano(se_dge_shrink)
+
+# Step 6: Generate the regulation summary of the genes
+DESeq2_gene_reg_summary<- gene_regulation_summary(se_dge_shrink)
+
+# Step 7: Export final results
+example_se_exports<- export_outputs(res_df = se_dge_shrink, summary_df = DESeq2_gene_reg_summary, filtering_diag = example_se_filtering_assessment, volcano = example_se_volcano, output_dir = file.path(tempdir(), "de_output") )
+#> Export complete. Files saved:
+#> /tmp/RtmpXsIwGM/de_output/de_results.tsv
+#> /tmp/RtmpXsIwGM/de_output/de_summary.tsv
+#> /tmp/RtmpXsIwGM/de_output/filtering_diagnostics.tsv
+#> /tmp/RtmpXsIwGM/de_output/volcano_plot.pdf
+#> /tmp/RtmpXsIwGM/de_output/volcano_plot.png
 ```
-
-### Step 3: Start the Differential Gene Expression Analysis
-
-#### Step 3.1: Determine the Low Expression Filter Threshold
-
-Evaluate model performance across different threshold values and select
-the best one.Replace `group_var` with the column to be categorized.
-Default `group_var` = “cell-type”. Replace `ref_level` with a specific
-cell type to be reference. Default `re_level` = “Tconv”. Replace
-`assay_name` with the appropriate label. Default \`assay_name =
-“counts”.
-
-``` r
-example_se_filtering_assessment <- determine_filter_threshold(
-  se_ln             = example_se,
-  count_thresholds  = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
-  assay_name        = "counts",
-  ref_level         = "Tconv",
-  group_var         = "cell_type",
-  p_threshold       = 0.05
-  )
-```
-
-#### Step 3.2: Filter Low Expression Genes
-
-Using the threshold value determined in Step 1, manually replace the
-`min_count_per_gene` variable and filter. Use the same SE utilized in
-Step 1. Default `min_count_per_gene` = 10. Replace `assay_name` with the
-appropriate label. Default \`assay_name = “counts”.
-
-``` r
-se_filtered <- filter_low_exp_genes(
-  se_ln               = example_se,
-  min_count_per_group = 10,
-  assay_name          = "counts"
-  )
-```
-
-#### Step 3.3: Differential Gene Expression Analysis via DESeq2
-
-With the remaining filtered genes, preform DESeq2 to analyze the gene
-expression. Replace `group_var` with the column to be categorized.
-Default `group_var` = “cell-type”. Replace `ref_level` with a specific
-cell type to be reference. Default `re_level` = “Tconv”
-
-``` r
-se_dge <- run_DESeq2(
-  se_ln     = se_filtered, 
-  group_var = "cell_type", 
-  ref_level = "Tconv"
-  )
-```
-
-#### Step 3.4: Apply log2_shrinkage on DESeq2 results to improve estimates.
-
-Replace `shrinkage` with the appropriate GLM estimator. Default
-`shrinkage` = “apeglm”.
-
-``` r
-se_dge_shrink <- log2_shrinkage(
-  dds       = se_dge, 
-  shrinkage = "apeglm"
-  )
-```
-
-#### Step 3.5: Intrepret the Gene Regulation
-
-Summarize the non-significant and up and down regulated genes in the
-data set. Replace `p_threshold` with the appropriate adjusted p-value
-threshold. Default `p_threshold` = 0.05. Replace `fc_threshold` with the
-appropriate fold-change threshold. Default `fc_threshold` = 0.5.
-
-``` r
-DESeq2_gene_reg_summary <- gene_regulation_summary(
-  res_df       = se_dge_shrink,
-  p_threshold  = 0.05,
-  fc_threshold = 0.5
-  )
-```
-
-#### Step 3.6: Visualize Expression
-
-Generate a volcano plot to visualize the `gene_reg_summary` results. Use
-the same `p_threshold` and `fc_threshold` values utilized in Step 5.
-Replace `set_title` with the correct title. Default `set_title` =
-“Volcano Plot - Lymph Node Treg vs Tconv”. Replace `xlab` with the
-correct x-axis title. Default `xlab` = “log2 Fold Change (Treg vs
-Tconv)”.
-
-``` r
-example_se_volcano <- generate_volcano(
-  res_df       = se_dge_shrink,
-  fc_threshold = 0.5,
-  xlab         = "log2 Fold Change (Treg vs Tconv)",
-  set_title    = "Volcano Plot - Lymph Node Treg vs Tconv",
-  p_threshold  = 0.05
-  )
-```
-
-#### Step 3.7: Export Results
-
-Export the se_dge_shrink, DESeq2_gene_reg_summary,
-example_se_filtering_assessment data frames as TSV tables and volcano
-plots as a PDF and PNG images. Outputs will export as “de_output” to
-current working directory unless explicitly indicated.
-
-``` r
-example_se_exports<- export_outputs(
-  res_df         = se_dge_shrink,
-  summary_df     = DESeq2_gene_reg_summary,
-  filtering_diag = example_se_filtering_assessment,
-  volcano        = example_se_volcano,
-  output_dir     = file.path(tempdir(), "de_output") 
-  )
-```
-
-------------------------------------------------------------------------
-
-## Notes
-
-JW26ADS8192 **R-package** includes an additional function (7 total
-functions) which collectively generates and exports
-filtering_analysis.tsv, dge_shrink.tsv, volcano_plot.pdf, and
-volcano_plot.png to current working directory. JW26ADS8192 **CLI** only
-includes 6 functions, which generate and export deliverable within a
-single step.

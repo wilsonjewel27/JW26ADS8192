@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>ADS 8192 Differential Expression with DESeq2 • JW26ADS8192</title>
-<script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">JW26ADS8192</a>
 
@@ -33,10 +33,9 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-methods" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Methods</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-methods">
-<li><a class="dropdown-item" href="articles/r-analysis.html">Differential Expression Analysis via R Studio</a></li>
-    <li><a class="dropdown-item" href="articles/cli-analysis.html">Differential Expression Analysis via Command Line Interface</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/getting-started.html">Getting Started with ADS8192</a></li>
   </ul>
 </li>
       </ul>
@@ -44,7 +43,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="nav-link" href="https://github.com/wilsonjewel27/JW26ADS8192/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/wilsonjewel27/JW26ADS8192/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -52,132 +51,58 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><p><a href="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
-<!-- badges: start -->
-
-<div class="section level1">
+  <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="jw26ads8192">JW26ADS8192<a class="anchor" aria-label="anchor" href="#jw26ads8192"></a>
 </h1></div>
-<p>Designed for RNA-seq workflows, <strong>JW26ADS8192</strong> provides a streamlined pipeline to differential expression results. Use a SummarizedExperiment object through the R package interface, or supply raw count matrices and sample metadata (TSV/CSV) directly via the command-line interface.</p>
-<hr>
+<p>JW26ADS8192 provides a tool that preforms Differential Gene Analysis on SummarizedExperiment Objects.</p>
 <div class="section level2">
-<h2 id="r-studio-analysis">R Studio Analysis<a class="anchor" aria-label="anchor" href="#r-studio-analysis"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install the package from GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"JW26ADS8192"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wilsonjewel27/JW26ADS8192"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
-</h3>
+<div class="section level2">
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load package and example data (SummarizedExperiment)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonjewel27/JW26ADS8192">JW26ADS8192</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonjewel27/JW26ADS8192" class="external-link">JW26ADS8192</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#load example data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_se</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Pick the optimal 'minimun gene count' filtering threshold.</span></span>
-<span><span class="va">example_se_filtering_assessment</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/determine_filter_threshold.html">determine_filter_threshold</a></span><span class="op">(</span></span>
-<span>  se_ln            <span class="op">=</span> <span class="va">example_se</span>,</span>
-<span>  count_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>, </span>
-<span>  assay_name       <span class="op">=</span> <span class="st">"counts"</span>, </span>
-<span>  ref_level        <span class="op">=</span> <span class="st">"Tconv"</span>, </span>
-<span>  group_var        <span class="op">=</span> <span class="st">"cell_type"</span>, </span>
-<span>  p_threshold      <span class="op">=</span> <span class="fl">0.05</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co">#Assess the 'minimun gene count' filtering threshold to determine the best threshold.</span></span>
+<span><span class="va">example_se_filtering_assessment</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/determine_filter_threshold.html">determine_filter_threshold</a></span><span class="op">(</span>se_ln <span class="op">=</span> <span class="va">example_se</span>,count_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>, assay_name <span class="op">=</span> <span class="st">"counts"</span>, ref_level <span class="op">=</span> <span class="st">"Tconv"</span>, group_var <span class="op">=</span> <span class="st">"cell_type"</span>, p_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Filter out the low expression genes</span></span>
-<span><span class="va">se_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_low_exp_genes.html">filter_low_exp_genes</a></span><span class="op">(</span></span>
-<span>  se_ln               <span class="op">=</span> <span class="va">example_se</span>, </span>
-<span>  min_count_per_group <span class="op">=</span> <span class="fl">10</span>, </span>
-<span>  assay_name          <span class="op">=</span> <span class="st">"counts"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co">#Filter out the low expression gene</span></span>
+<span><span class="va">se_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_low_exp_genes.html">filter_low_exp_genes</a></span><span class="op">(</span>se_ln <span class="op">=</span> <span class="va">example_se</span>, min_count_per_group <span class="op">=</span> <span class="fl">10</span>, assay_name <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run the DESeq2 pipeline</span></span>
+<span><span class="co">#Run the DESeq2 pipeline</span></span>
 <span><span class="va">se_dge</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/run_DESeq2.html">run_DESeq2</a></span><span class="op">(</span>se_ln <span class="op">=</span> <span class="va">se_filtered</span>, group_var <span class="op">=</span> <span class="st">"cell_type"</span>, ref_level <span class="op">=</span> <span class="st">"Tconv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Shrink log2 fold-change estimates</span></span>
+<span><span class="co">#Apply the log2fold-change shrinkage for more reliable effect-size estimates</span></span>
 <span><span class="va">se_dge_shrink</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/log2_shrinkage.html">log2_shrinkage</a></span><span class="op">(</span>dds <span class="op">=</span> <span class="va">se_dge</span>, shrinkage <span class="op">=</span> <span class="st">"apeglm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Summarize Gene Expression</span></span>
-<span><span class="va">DESeq2_gene_reg_summary</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_regulation_summary.html">gene_regulation_summary</a></span><span class="op">(</span></span>
-<span>  res_df       <span class="op">=</span> <span class="va">se_dge_shrink</span>, </span>
-<span>  p_threshold  <span class="op">=</span> <span class="fl">0.05</span>, </span>
-<span>  fc_threshold <span class="op">=</span>  <span class="fl">0.5</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co">#Summarize the number of upregulated, down regulated and non-signficant genes in a dataframe</span></span>
+<span><span class="va">DESeq2_gene_reg_summary</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_regulation_summary.html">gene_regulation_summary</a></span><span class="op">(</span>res_df <span class="op">=</span> <span class="va">se_dge_shrink</span>, p_threshold <span class="op">=</span> <span class="fl">0.05</span>, fc_threshold <span class="op">=</span>  <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Visualize</span></span>
-<span><span class="va">example_se_volcano</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/generate_volcano.html">generate_volcano</a></span><span class="op">(</span></span>
-<span>  res_df        <span class="op">=</span> <span class="va">se_dge_shrink</span>, </span>
-<span>  fc_threshold  <span class="op">=</span>  <span class="fl">0.5</span>, </span>
-<span>  xlab          <span class="op">=</span> <span class="st">"log2 Fold Change (Treg vs Tconv)"</span>, </span>
-<span>  set_title     <span class="op">=</span> <span class="st">"Volcano Plot - Lymph Node Treg vs Tconv"</span>, </span>
-<span>  p_threshold   <span class="op">=</span> <span class="fl">0.05</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co">#Generate the volcano plot corresponging to the gene regulation summary dataframe</span></span>
+<span><span class="va">example_se_volcano</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/generate_volcano.html">generate_volcano</a></span><span class="op">(</span>res_df <span class="op">=</span> <span class="va">se_dge_shrink</span>, fc_threshold <span class="op">=</span>  <span class="fl">0.5</span>, xlab <span class="op">=</span> <span class="st">"log2 Fold Change (Treg vs Tconv)"</span>, set_title <span class="op">=</span> <span class="st">"Volcano Plot - Lymph Node Treg vs Tconv"</span>, p_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Export Results</span></span>
-<span><span class="va">example_se_exports</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/export_outputs.html">export_outputs</a></span><span class="op">(</span></span>
-<span>  res_df         <span class="op">=</span> <span class="va">se_dge_shrink</span>, </span>
-<span>  summary_df     <span class="op">=</span> <span class="va">DESeq2_gene_reg_summary</span>, </span>
-<span>  filtering_diag <span class="op">=</span> <span class="va">example_se_filtering_assessment</span>, </span>
-<span>  volcano        <span class="op">=</span> <span class="va">example_se_volcano</span>, </span>
-<span>  output_dir     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"(tempdir()"</span>, <span class="st">"de_output"</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="command-line-interface-via-rapp">Command-Line Interface (via Rapp)<a class="anchor" aria-label="anchor" href="#command-line-interface-via-rapp"></a>
-</h2>
-<div class="section level3">
-<h3 id="installation-1">Installation<a class="anchor" aria-label="anchor" href="#installation-1"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Install the package from GitHub</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"Rapp::install_pkg_cli_apps('JW26ADS8192')"</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="quick-start-1">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start-1"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Load package and example data (TSV)</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="ex">ex_counts_path</span> <span class="op">&lt;</span>- system.file<span class="er">(</span><span class="st">"testdata"</span><span class="ex">,</span> <span class="st">"example_counts.tsv"</span>, package = <span class="st">"JW26ADS8192"</span><span class="kw">)</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="ex">ex_meta_path</span>   <span class="op">&lt;</span>- system.file<span class="er">(</span><span class="st">"testdata"</span><span class="ex">,</span> <span class="st">"example_meta.tsv"</span>, package = <span class="st">"JW26ADS8192"</span><span class="kw">)</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="ex">Sys.setenv</span><span class="er">(</span><span class="ex">EX_COUNTS</span> = ex_counts_path<span class="kw">)</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="ex">Sys.setenv</span><span class="er">(</span><span class="ex">EX_META</span>   = ex_meta_path<span class="kw">)</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># Pick the optimal 'minimun gene count' filtering threshold.</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="ex">JW26ADS8192</span> determine_filter_threshold <span class="at">--count</span> <span class="va">$EX_COUNTS</span> <span class="at">--meta</span> <span class="va">$EX_META</span> <span class="at">--output</span> ./results/</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co"># Filter out the low expression genes</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="ex">JW26ADS8192</span> filter_low_exp_genes <span class="at">--count</span> <span class="va">$EX_COUNTS</span> <span class="at">--meta</span> <span class="va">$EX_META</span> <span class="at">--output</span> ./results/</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co"># Run the DESeq2 pipeline</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="ex">JW26ADS8192</span> run_DESeq2 <span class="at">--input</span> ./results/se_filtered.rds <span class="at">--output</span> ./results/</span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co"># Shrink log2 fold-change estimates</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="ex">JW26ADS8192</span> log2_shrinkage  <span class="at">--input</span> ./results/se_dge.rds <span class="at">--output</span> ./results/</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co"># Summarize Gene Expression</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="ex">JW26ADS8192</span> gene_regulation_summary  <span class="at">--input</span> ./results/dge_shrink.rds <span class="at">--output</span> ./results/</span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co"># Visualize</span></span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="ex">JW26ADS8192</span> generate_volcano <span class="at">--input</span> ./results/dge_shrink.rds <span class="at">--output</span> ./results/</span></code></pre></div>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
-</h2>
-<p>JW26ADS8192 <strong>R-package</strong> includes an additional function (7 total functions) which collectively generates and exports filtering_analysis.tsv, dge_shrink.tsv, volcano_plot.pdf, and volcano_plot.png to current working directory. JW26ADS8192 <strong>CLI</strong> only includes 6 functions, which generate and export deliverable within a single step.</p>
-</div>
-</div>
+<span><span class="co">#Export the filtering threhold assessment, differential expression results and Expression-Count summary to TSV files &amp; the volcano plot to pdf and png</span></span>
+<span><span class="va">example_se_exports</span><span class="op">&lt;-</span> <span class="fu"><a href="reference/export_outputs.html">export_outputs</a></span><span class="op">(</span>res_df <span class="op">=</span> <span class="va">se_dge_shrink</span>, summary_df <span class="op">=</span> <span class="va">DESeq2_gene_reg_summary</span>, filtering_diag <span class="op">=</span> <span class="va">example_se_filtering_assessment</span>, volcano <span class="op">=</span> <span class="va">example_se_volcano</span>, output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"ADD/YOUR/PATH"</span>, <span class="st">"de_output"</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<!-- badges: start -->
 
+<!-- badges: start -->
+
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/">Browse source code</a></li>
-<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/issues">Report a bug</a></li>
+<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -207,7 +132,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml"><img src="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/wilsonjewel27/JW26ADS8192/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
 </ul>
 </div>
 

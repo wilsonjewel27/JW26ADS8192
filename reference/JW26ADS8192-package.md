@@ -16,8 +16,6 @@ Useful links:
 
 - <https://github.com/wilsonjewel27/JW26ADS8192>
 
-- <https://wilsonjewel27.github.io/JW26ADS8192/>
-
 - Report bugs at <https://github.com/wilsonjewel27/JW26ADS8192/issues>
 
 ## Author
