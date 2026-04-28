@@ -1,4 +1,68 @@
 url: https://wilsonjewel27.github.io/JW26ADS8192/
+url: https://github.com/wilsonjewel27/JW26ADS8192
 template:
   bootstrap: 5
+  bootswatch: flatly
+  light-switch: true
+navbar:
+  structure:
+    left:
+    - intro
+    - reference
+    - articles
+    right:
+    - search
+    - github
+  components:
+    articles:
+      text: Methods
+      menu:
+      - text: 'Differential Expression Analysis via R Studio'
+        href: articles/r-analysis.html
+      - text: 'Differential Expression Analysis via Command Line Interface'
+        href: articles/cli-analysis.html
 
+reference:
+- title: Example Data
+  desc: Load an example simulated SummarizedExperiment object
+  contents:
+  - example_se
+- title: Determining the Minimal Gene Threshold
+  desc: Use to determine which gene should not be included in analysis.
+  contents:
+  - determine_filter_threshold
+- title: Filter Low Expression Genes
+  desc: Pick a threshold to filter genes with low expression counts
+  contents:
+  - filter_low_exp_genes
+- title: Run DESeq2 Analysis
+  desc: Run differential gene expression analysis
+  contents:
+  - run_DESeq2
+- title: Shrink Results
+  desc: To get more reilable estimates run the log2_shrinkage function on DESeq2 results
+  contents: log2_shrinkage
+- title: Interpret Gene Regulation
+  desc: Tabularly visualize the number for up and down regulated and insignificant genes
+  contents: gene_regulation_summary
+- title: Visualize Expression
+  desc: Visualize the gene expression in a volcano plot
+  contents: generate_volcano
+- title: Export Results
+  desc: Export the results of generate_volcano, determine_filter_threshold, log2_shrinkage, and gene_regulation_summary into your working directory.
+  contents: export_outputs
+articles:
+- title: Getting Started
+  navbar: ~
+  contents:
+  - "getting-started"
+- title: In-Depth Tutorial
+  navbar: ~
+  contents:
+  - 'r-analysis'
+  - 'cli_analysis'
+#  - run-DESeq2-analysis
+#  - shrink-dge-results
+#  - summarize-gene-regulation
+#  - volcano-plot
+#  - export-results
