@@ -7,7 +7,3 @@
 ^docs$
 ^pkgdown$
 ^\.github$
-^Dockerfile$
-^code_execution$
-^environment.yml$
-^environment_lock.yml$

@@ -12,7 +12,6 @@ Provides a tool for differential gene analysis of lymph node regulatory T cells 
 Useful links:
 \itemize{
   \item \url{https://github.com/wilsonjewel27/JW26ADS8192}
-  \item \url{https://wilsonjewel27.github.io/JW26ADS8192/}
   \item Report bugs at \url{https://github.com/wilsonjewel27/JW26ADS8192/issues}
 }
 

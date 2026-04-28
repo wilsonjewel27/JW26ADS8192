@@ -23,8 +23,6 @@ Filter genes with low expression
 data(example_se)
 
 # Step 1; Filter low expression genes
-se_filtered <- filter_low_exp_genes(se_ln = example_se,
-min_count_per_group = 10,
-assay_name = "counts")
+se_filtered <- filter_low_exp_genes(se_ln = example_se, min_count_per_group = 10, assay_name = "counts")
 
 }

@@ -13,22 +13,15 @@
 #'
 #' @importFrom  SummarizedExperiment assay colData
 #' @importFrom  DESeq2 DESeqDataSet DESeq results
-#' @importFrom  utils write.table
 #' @export
 #'
 #' @examples
 #' data(example_se)
 #'
 #' # Step 1: Evaluate how model preforms using different threshold values
-#' example_se_filtering_assessment<- determine_filter_threshold(
-#' se_ln = example_se,
-#' count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
-#' assay_name = "counts",
-#' ref_level = "Tconv",
-#' group_var = "cell_type",
-#' p_threshold = 0.05)
+#' example_se_filtering_assessment<- determine_filter_threshold(se_ln = example_se,count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500), assay_name = "counts", ref_level = "Tconv", group_var = "cell_type", p_threshold = 0.05)
 #'
-#' # Step 2: Pick the best min count threshold and set \min_count_per_group` (default: 10)`
+#' # Step 2: Choose the optimal min gene count threshold per gene and insert into all functions. `min_count_per_group` (default: 10)
 #'
 determine_filter_threshold<- function(se_ln, count_thresholds = c(0, 1, 5, 10, 20, 50, 100, 200, 500),
                                       assay_name = "counts", ref_level = "Tconv",
